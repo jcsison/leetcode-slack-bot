@@ -8,9 +8,8 @@ import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions';
 import { logError, logInfo } from '../../lib/utils/helpers';
 import { uri } from '../../lib/dataSource/leetcode/graphql/config';
 
-const _rule = new RecurrenceRule();
-_rule.hour = 6;
-const rule = '*/1 * * * *';
+const rule = new RecurrenceRule();
+rule.hour = 18;
 
 const postQuestion = async () => {
   try {
