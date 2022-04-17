@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { logError, logInfo } from '../lib/utils/helpers';
+
+import { logError, logInfo } from '../../lib/utils/helpers';
 
 export const oauth = async (req: Request, res: Response) => {
   try {
@@ -27,10 +28,13 @@ export const oauth = async (req: Request, res: Response) => {
     });
 
     if (apiResponse.status === 200) {
-      res.sendStatus(200);
       logInfo('User authenticated');
+      res.sendStatus(200);
+    } else {
+      throw new Error('Error authenticating user');
     }
   } catch (error) {
     logError(error, 'Error authenticating user');
+    res.sendStatus(500);
   }
 };

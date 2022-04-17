@@ -10,7 +10,7 @@ const help = async ({
 }: SlackCommandMiddlewareArgs) => {
   try {
     await ack();
-    say("You've contacted the help command!");
+    await say("You've contacted the help command!");
     logInfo('Help command triggered');
   } catch (error) {
     logError(error);

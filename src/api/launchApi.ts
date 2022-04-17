@@ -1,7 +1,7 @@
 import { app } from '..';
-import { oauth } from './oauth';
+import { empty, oauth } from './resource';
 
 export const launchApi = () => {
-  app.get('/', () => {});
+  app.get('/', empty);
   app.get('/oauth/authorize', oauth);
 };
