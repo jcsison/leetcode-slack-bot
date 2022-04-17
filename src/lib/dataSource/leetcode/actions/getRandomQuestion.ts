@@ -1,19 +1,18 @@
 import { Variables } from 'graphql-request';
 
+import { Enums, LeetCodeTypes } from '../../../utils/types';
 import { Queries } from '../graphql/queries';
-import { Question } from '../../../utils/types';
-import { QuestionDifficulty } from '../../../utils/types/enums';
 import { graphQLRequest } from '../graphql';
 
-export const getRandomQuestion = (difficulty?: QuestionDifficulty) => {
+export const getRandomQuestion = (difficulty?: Enums.QuestionDifficulty) => {
   const variables: Variables = {
     categorySlug: 'algorithms',
     filters: {
-      difficulty: difficulty ?? QuestionDifficulty.EASY
+      difficulty: difficulty ?? Enums.QuestionDifficulty.EASY
     }
   };
 
-  return graphQLRequest<Question>(
+  return graphQLRequest<LeetCodeTypes.Question>(
     'randomQuestion',
     Queries.randomQuestion,
     variables
