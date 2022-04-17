@@ -1,6 +1,7 @@
-import { helpCommand, rollCommand } from '../commands';
+import * as Commands from '../commands';
 
 export const commands = () => {
-  helpCommand();
-  rollCommand();
+  Commands.helpCommand();
+  Commands.rerollCommand();
+  Commands.rollCommand();
 };

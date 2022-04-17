@@ -1,5 +1,3 @@
-import { command } from './helper';
-
 interface CommandInfo {
   command: string;
   description: string;
@@ -13,6 +11,10 @@ const commands: CommandInfo[] = [
   {
     command: '/roll',
     description: 'Roll a new LeetCode problem'
+  },
+  {
+    command: '/reroll',
+    description: 'Rerolls the last LeetCode problem'
   }
 ];
 
@@ -22,6 +24,4 @@ const commandString =
     .map(command => `\`${command.command}\`: ${command.description}`)
     .join('\n');
 
-const help = () => commandString;
-
-export const helpCommand = command('/help', help);
+export const help = () => commandString;
