@@ -1,6 +1,6 @@
 import { SlackCommandMiddlewareArgs } from '@slack/bolt';
 
-import { app } from '../..';
+import { bolt } from '../..';
 import { logError, logInfo } from '../../lib/utils/helpers';
 
 const help = async ({
@@ -17,4 +17,4 @@ const help = async ({
   }
 };
 
-export const helpCommand = () => app.command('/help', help);
+export const helpCommand = () => bolt.command('/help', help);

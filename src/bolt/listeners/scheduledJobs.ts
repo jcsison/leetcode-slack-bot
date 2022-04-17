@@ -1,5 +1,6 @@
-import { postQuestionJob } from '../jobs';
+import * as Jobs from '../jobs';
 
 export const scheduledJobs = () => {
-  postQuestionJob();
+  Jobs.postQuestion();
+  Jobs.pingDyno();
 };

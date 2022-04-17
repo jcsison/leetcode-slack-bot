@@ -1,9 +1,9 @@
-import { app } from '../..';
+import { bolt } from '../..';
 import { logError } from '../../lib/utils/helpers';
 
 export const getChannels = async () => {
   try {
-    const data = await app.client.conversations.list();
+    const data = await bolt.client.conversations.list();
 
     const channels = data.channels?.filter(
       channel => channel.is_channel && channel.is_member

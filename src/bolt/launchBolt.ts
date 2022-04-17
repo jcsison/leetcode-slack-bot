@@ -1,6 +1,6 @@
 import { commands, scheduledJobs } from './listeners';
 
-export const launchApp = () => {
+export const launchBolt = () => {
   commands();
   scheduledJobs();
 };

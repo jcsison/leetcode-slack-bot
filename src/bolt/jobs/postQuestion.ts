@@ -1,8 +1,8 @@
 import { RecurrenceRule, scheduleJob } from 'node-schedule';
 
 import { Constants, Maybe, QuestionDifficulty } from '../../lib/utils/types';
-import { Question } from '../../lib/utils/types/leetcode';
-import { app } from '../..';
+import { Question } from '../../lib/utils/types';
+import { bolt } from '../..';
 import { getChannels } from '../actions/getChannels';
 import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions';
 import { logError, logInfo } from '../../lib/utils/helpers';
@@ -11,7 +11,7 @@ import { uri } from '../../lib/dataSource/leetcode/graphql/config';
 const rule = new RecurrenceRule();
 rule.hour = 18;
 
-const postQuestion = async () => {
+const postQuestionFunc = async () => {
   try {
     const channels = await getChannels();
 
@@ -33,9 +33,9 @@ const postQuestion = async () => {
 
     const questionUrl = uri.problem(randomQuestion.titleSlug);
 
-    channels?.forEach(channel => {
+    channels?.forEach(async channel => {
       if (channel.id) {
-        app.client.chat.postMessage({
+        await bolt.client.chat.postMessage({
           channel: channel.id,
           text: questionUrl
         });
@@ -51,4 +51,4 @@ const postQuestion = async () => {
   }
 };
 
-export const postQuestionJob = () => scheduleJob(rule, postQuestion);
+export const postQuestion = () => scheduleJob(rule, postQuestionFunc);

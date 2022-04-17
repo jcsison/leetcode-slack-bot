@@ -34,9 +34,9 @@ export const logInfo = (
   message?: string,
   ...params: unknown[]
 ) => {
-  if (typeof info === 'string') {
-    logger.info(undefined, info, ...params);
-  } else {
+  if (message) {
     logger.info(info, message, ...params);
+  } else {
+    logger.info(info, undefined, ...params);
   }
 };

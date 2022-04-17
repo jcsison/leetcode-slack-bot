@@ -1,7 +1,7 @@
 import { Variables } from 'graphql-request';
 
 import { Queries } from '../graphql/queries';
-import { Question } from '../../../utils/types/leetcode';
+import { Question } from '../../../utils/types';
 import { QuestionDifficulty } from '../../../utils/types/enums';
 import { graphQLRequest } from '../graphql';
 
