@@ -1,22 +1,23 @@
 import axios from 'axios';
-import { RecurrenceRule, scheduleJob } from 'node-schedule';
+import { RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
 
 import { Log } from '../../lib/utils/helpers';
 
-const rule = new RecurrenceRule();
-rule.minute = [0, 30];
-
-const intervalPingFunc = async () => {
-  try {
-    if (process.env.APP_URL) {
-      await axios(process.env.APP_URL);
-      Log.info('Pinged dyno');
-    } else {
-      throw new Error('App URL not found');
+class IntervalPing {
+  rule: RecurrenceSpecObjLit = { minute: [0] };
+  fn = async () => {
+    try {
+      if (process.env.APP_URL) {
+        await axios(process.env.APP_URL);
+        Log.info('Pinged dyno');
+      } else {
+        throw new Error('App URL not found');
+      }
+    } catch (error) {
+      Log.error(error, 'Error pinging dyno');
     }
-  } catch (error) {
-    Log.error('Error pinging dyno');
-  }
-};
+  };
+  job = () => scheduleJob(this.rule, this.fn);
+}
 
-export const intervalPing = () => scheduleJob(rule, intervalPingFunc);
+export const intervalPing = new IntervalPing().job;

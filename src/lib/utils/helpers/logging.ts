@@ -13,11 +13,11 @@ export const error = (
   ...params: unknown[]
 ) => {
   if (Guard.object<DataError>('name', 'message', 'data')(error)) {
-    logger.error(error, message, error.data, ...params);
-  } else if (Guard.object<Error>('name', 'message')) {
+    logger.error(error, message, error.message, error.data, ...params);
+  } else if (Guard.object<Error>('name', 'message')(error)) {
     logger.error(error, message, ...params);
   } else {
-    logger.error(undefined, message, ...params);
+    logger.error(error, message, ...params);
   }
 };
 

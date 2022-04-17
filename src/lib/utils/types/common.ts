@@ -7,8 +7,4 @@ export class DataError extends Error {
   }
 }
 
-export interface Default<T> {
-  default: T;
-}
-
 export type Maybe<T> = T | undefined | null;

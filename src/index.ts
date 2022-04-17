@@ -1,24 +1,40 @@
-import * as Bolt from '@slack/bolt';
 import * as dotenv from 'dotenv';
-import express from 'express';
-import { initializeApp } from 'firebase/app';
+import { App, CodedError, ExpressReceiver, LogLevel } from '@slack/bolt';
 import { getDatabase } from 'firebase/database';
+import { initializeApp } from 'firebase/app';
 
-import { Default } from './lib/utils/types';
+import { LCFileInstallationStore } from './bolt/utils/LCFileInstallationStore';
 import { Log } from './lib/utils/helpers';
 import { launchApi } from './api/launchApi';
 import { launchBolt } from './bolt/launchBolt';
 
 dotenv.config();
 
-export const app = express();
+export const receiver = new ExpressReceiver({
+  clientId: process.env.SLACK_CLIENT_ID,
+  clientSecret: process.env.SLACK_CLIENT_SECRET,
+  installationStore: new LCFileInstallationStore(),
+  scopes: [
+    'app_mentions:read',
+    'channels:history',
+    'channels:join',
+    'channels:read',
+    'chat:write',
+    'commands',
+    'files:read',
+    'groups:read',
+    'im:read',
+    'incoming-webhook',
+    'mpim:read',
+    'reactions:write'
+  ],
+  signingSecret: process.env.SLACK_SIGNING_SECRET ?? '',
+  stateSecret: process.env.SLACK_STATE_SECRET
+});
 
-// Type cast chain is a workaround to properly import default Bolt exports
-export const bolt = new (Bolt as unknown as Default<typeof Bolt>).default.App({
-  appToken: process.env.SLACK_APP_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  socketMode: true,
-  token: process.env.SLACK_BOT_TOKEN
+export const bolt = new App({
+  receiver,
+  logLevel: LogLevel.DEBUG
 });
 
 export const firebase = initializeApp({
@@ -33,18 +49,23 @@ export const firebase = initializeApp({
 
 export const db = getDatabase(firebase);
 
-const startApi = () => {
-  const apiPort = process.env.PORT ?? 3000;
-  app.listen(apiPort);
-  launchApi();
-  Log.info(`API listening on port ${apiPort}`);
-};
-
 const startBolt = async () => {
-  await bolt.start();
+  const port = process.env.PORT ?? 3000;
+  await bolt.start(port);
+  Log.info(`Bolt listening on port ${port}`);
+  launchApi();
   launchBolt();
-  Log.info('Bolt started');
 };
 
-startApi();
+bolt.error((error: CodedError) => new Promise(() => Log.error(error)));
+
+bolt.command('/test', async ({ ack, say }) => {
+  await ack();
+  await say('This is a test!');
+});
+
+bolt.message('knock knock', async ({ say }) => {
+  await say("_Who's there?_");
+});
+
 startBolt().catch(Log.error);

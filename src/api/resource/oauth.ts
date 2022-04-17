@@ -4,12 +4,10 @@ import { Request, Response } from 'express';
 
 import { DataError, Maybe, SlackTypes } from '../../lib/utils/types';
 import { Log } from '../../lib/utils/helpers';
-import { dbStore } from '../../lib/firebase';
 
+// This is deprecated in favor of /slack/oauth_redirect
 export const oauth = async (req: Request, res: Response) => {
   try {
-    Log.info(req);
-
     if (!req.query.code) {
       throw new Error('Access denied');
     }
@@ -43,10 +41,6 @@ export const oauth = async (req: Request, res: Response) => {
       apiResponse.data.access_token &&
       apiResponse.data.team?.id
     ) {
-      await dbStore(
-        'team/' + apiResponse.data.team.id,
-        apiResponse.data.access_token
-      );
       Log.info('User authenticated');
       res.sendStatus(200);
     } else {

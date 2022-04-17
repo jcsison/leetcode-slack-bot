@@ -1,9 +1,9 @@
 import { SlashCommand } from '@slack/bolt';
 
 import { Log } from '../../../lib/utils/helpers';
+import { UpdateData } from '../helper';
 import { fetchRandomQuestion } from '../../../lib/dataSource/leetcode/actions';
 import { getPreviousQuestionMessage } from '../../actions';
-import { UpdateData } from '../helper';
 
 export const reroll = async (command: SlashCommand) => {
   try {
@@ -14,7 +14,7 @@ export const reroll = async (command: SlashCommand) => {
     );
 
     if (!previousQuestionMessage || !previousQuestionMessage.ts) {
-      throw new Error('Error fetch previous question message');
+      throw new Error('Error fetching previous question message');
     }
 
     const randomQuestion = await fetchRandomQuestion();
@@ -30,6 +30,6 @@ export const reroll = async (command: SlashCommand) => {
 
     return updateData;
   } catch (error) {
-    Log.error(error);
+    Log.error(error, 'Error rerolling question');
   }
 };

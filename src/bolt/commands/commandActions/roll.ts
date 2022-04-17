@@ -11,6 +11,6 @@ export const roll = async () => {
 
     return randomQuestion.url;
   } catch (error) {
-    Log.error(error);
+    Log.error(error, 'Error rolling question');
   }
 };

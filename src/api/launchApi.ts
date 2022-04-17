@@ -1,7 +1,7 @@
-import { app } from '..';
+import { receiver } from '..';
 import { empty, oauth } from './resource';
 
 export const launchApi = () => {
-  app.get('/', empty);
-  app.get('/oauth/authorize', oauth);
+  receiver.router.get('/', empty);
+  receiver.router.get('/oauth/authorize', oauth);
 };
