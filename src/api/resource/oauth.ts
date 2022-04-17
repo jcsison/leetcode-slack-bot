@@ -1,6 +1,9 @@
+import FormData from 'form-data';
+import axios from 'axios';
 import { Request, Response } from 'express';
 
-import { logError, logInfo } from '../../lib/utils/helpers';
+import { DataError, logError, logInfo } from '../../lib/utils/helpers';
+import { Maybe, OAuthResponse } from '../../lib/utils/types';
 
 export const oauth = async (req: Request, res: Response) => {
   try {
@@ -14,24 +17,30 @@ export const oauth = async (req: Request, res: Response) => {
       throw new Error('Slack API URL not found');
     }
 
-    const data = {
-      form: {
-        client_id: process.env.SLACK_CLIENT_ID,
-        client_secret: process.env.SLACK_CLIENT_SECRET,
-        code: req.query.code
-      }
-    };
+    if (!process.env.SLACK_CLIENT_ID) {
+      throw new Error('Slack client ID not found');
+    }
 
-    const apiResponse = await fetch(process.env.SLACK_API_URL, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
+    if (!process.env.SLACK_CLIENT_SECRET) {
+      throw new Error('Slack client secret not found');
+    }
 
-    if (apiResponse.status === 200) {
+    const data = new FormData();
+    data.append('client_id', process.env.SLACK_CLIENT_ID);
+    data.append('client_secret', process.env.SLACK_CLIENT_SECRET);
+    data.append('code', req.query.code.toString());
+
+    const apiResponse = await axios.post<Maybe<OAuthResponse>>(
+      process.env.SLACK_API_URL + '/oauth.v2.access',
+      data,
+      { headers: data.getHeaders() }
+    );
+
+    if (apiResponse.status === 200 && apiResponse.data?.ok) {
       logInfo('User authenticated');
       res.sendStatus(200);
     } else {
-      throw new Error('Error authenticating user');
+      throw new DataError('Error authenticating user', apiResponse.data?.error);
     }
   } catch (error) {
     logError(error, 'Error authenticating user');
