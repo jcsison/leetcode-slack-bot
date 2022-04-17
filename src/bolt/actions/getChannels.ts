@@ -1,5 +1,5 @@
+import { Log } from '../../lib/utils/helpers';
 import { bolt } from '../..';
-import { logError } from '../../lib/utils/helpers';
 
 export const getChannels = async () => {
   try {
@@ -11,6 +11,6 @@ export const getChannels = async () => {
 
     return channels;
   } catch (error) {
-    logError(error, 'Error getting channels');
+    Log.error(error, 'Error getting channels');
   }
 };

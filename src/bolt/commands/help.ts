@@ -1,7 +1,7 @@
 import { SlackCommandMiddlewareArgs } from '@slack/bolt';
 
+import { Log } from '../../lib/utils/helpers';
 import { bolt } from '../..';
-import { logError, logInfo } from '../../lib/utils/helpers';
 
 const help = async ({
   command: _command,
@@ -11,9 +11,9 @@ const help = async ({
   try {
     await ack();
     await say("You've contacted the help command!");
-    logInfo('Help command triggered');
+    Log.info('Help command triggered');
   } catch (error) {
-    logError(error);
+    Log.error(error);
   }
 };
 

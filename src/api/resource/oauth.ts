@@ -2,12 +2,12 @@ import FormData from 'form-data';
 import axios from 'axios';
 import { Request, Response } from 'express';
 
-import { DataError, logError, logInfo } from '../../lib/utils/helpers';
-import { Maybe, OAuthResponse } from '../../lib/utils/types';
+import { DataError, Maybe, SlackTypes } from '../../lib/utils/types';
+import { Log } from '../../lib/utils/helpers';
 
 export const oauth = async (req: Request, res: Response) => {
   try {
-    logInfo(req);
+    Log.info(req);
 
     if (!req.query.code) {
       throw new Error('Access denied');
@@ -30,20 +30,20 @@ export const oauth = async (req: Request, res: Response) => {
     data.append('client_secret', process.env.SLACK_CLIENT_SECRET);
     data.append('code', req.query.code.toString());
 
-    const apiResponse = await axios.post<Maybe<OAuthResponse>>(
+    const apiResponse = await axios.post<Maybe<SlackTypes.OAuthResponse>>(
       process.env.SLACK_API_URL + '/oauth.v2.access',
       data,
       { headers: data.getHeaders() }
     );
 
     if (apiResponse.status === 200 && apiResponse.data?.ok) {
-      logInfo('User authenticated');
+      Log.info('User authenticated');
       res.sendStatus(200);
     } else {
       throw new DataError('Error authenticating user', apiResponse.data?.error);
     }
   } catch (error) {
-    logError(error, 'Error authenticating user');
+    Log.info(error, 'Error authenticating user');
     res.sendStatus(500);
   }
 };

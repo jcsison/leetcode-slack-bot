@@ -1,11 +1,10 @@
 import { RecurrenceRule, scheduleJob } from 'node-schedule';
 
-import { Constants, Maybe, QuestionDifficulty } from '../../lib/utils/types';
-import { Question } from '../../lib/utils/types';
+import { Constants, Enums, LeetCodeTypes, Maybe } from '../../lib/utils/types';
+import { Log } from '../../lib/utils/helpers';
 import { bolt } from '../..';
 import { getChannels } from '../actions/getChannels';
 import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions';
-import { logError, logInfo } from '../../lib/utils/helpers';
 import { uri } from '../../lib/dataSource/leetcode/graphql/config';
 
 const rule = new RecurrenceRule();
@@ -16,14 +15,14 @@ const postQuestionFunc = async () => {
     const channels = await getChannels();
 
     let fetchAttempts = Constants.MAX_FETCH_ATTEMPTS;
-    let randomQuestion: Maybe<Question> = undefined;
+    let randomQuestion: Maybe<LeetCodeTypes.Question> = undefined;
 
     // Keep fetching random questions until a non-premium is fetched
     while (
       (!randomQuestion || randomQuestion.isPaidOnly) &&
       fetchAttempts > 0
     ) {
-      randomQuestion = await getRandomQuestion(QuestionDifficulty.EASY);
+      randomQuestion = await getRandomQuestion(Enums.QuestionDifficulty.EASY);
       fetchAttempts--;
     }
 
@@ -40,14 +39,14 @@ const postQuestionFunc = async () => {
           text: questionUrl
         });
 
-        logInfo(
+        Log.info(
           { channelName: channel.name, message: questionUrl },
           'Posted question'
         );
       }
     });
   } catch (error) {
-    logError(error, 'Error posting question');
+    Log.error(error, 'Error posting question');
   }
 };
 

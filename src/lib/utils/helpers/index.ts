@@ -1,2 +1,2 @@
 export * as Guard from './guards'
-export * from './logging';
+export * as Log from './logging';

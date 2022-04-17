@@ -1,21 +1,13 @@
 import pino from 'pino';
 
+import { DataError } from '../types';
 import { Guard } from '.';
-
-export class DataError extends Error {
-  data: unknown = undefined;
-
-  constructor(message: string, data: unknown) {
-    super(message);
-    this.data = data;
-  }
-}
 
 const logger = pino({
   base: undefined
 });
 
-export const logError = (
+export const error = (
   error: unknown,
   message?: string,
   ...params: unknown[]
@@ -29,7 +21,7 @@ export const logError = (
   }
 };
 
-export const logInfo = (
+export const info = (
   info: unknown,
   message?: string,
   ...params: unknown[]

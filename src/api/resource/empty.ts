@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 
-import { logInfo } from '../../lib/utils/helpers';
+import { Log } from '../../lib/utils/helpers';
 
 export const empty = (_req: Request, res: Response) => {
-  logInfo('Received ping');
+  Log.info('Received ping');
   res.sendStatus(200);
 };

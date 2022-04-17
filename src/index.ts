@@ -3,9 +3,9 @@ import * as dotenv from 'dotenv';
 import express from 'express';
 
 import { Default } from './lib/utils/types';
+import { Log } from './lib/utils/helpers';
 import { launchApi } from './api/launchApi';
 import { launchBolt } from './bolt/launchBolt';
-import { logError, logInfo } from './lib/utils/helpers';
 
 dotenv.config();
 
@@ -20,17 +20,17 @@ export const bolt = new (Bolt as unknown as Default<typeof Bolt>).default.App({
 });
 
 const startApi = () => {
-  const apiPort = process.env.PORT ?? process.env.API_PORT ?? 3001;
+  const apiPort = process.env.PORT ?? 3000;
   app.listen(apiPort);
   launchApi();
-  logInfo(`API listening on port ${apiPort}`);
+  Log.info(`API listening on port ${apiPort}`);
 };
 
 const startBolt = async () => {
   await bolt.start();
-  logInfo('Bolt started');
   launchBolt();
+  Log.info('Bolt started');
 };
 
 startApi();
-startBolt().catch(logError);
+startBolt().catch(Log.error);
