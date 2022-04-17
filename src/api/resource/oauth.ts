@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 
 import { DataError, Maybe, SlackTypes } from '../../lib/utils/types';
 import { Log } from '../../lib/utils/helpers';
+import { dbStore } from '../../lib/firebase';
 
 export const oauth = async (req: Request, res: Response) => {
   try {
@@ -36,7 +37,16 @@ export const oauth = async (req: Request, res: Response) => {
       { headers: data.getHeaders() }
     );
 
-    if (apiResponse.status === 200 && apiResponse.data?.ok) {
+    if (
+      apiResponse.status === 200 &&
+      apiResponse.data?.ok &&
+      apiResponse.data.access_token &&
+      apiResponse.data.team?.id
+    ) {
+      await dbStore(
+        'team/' + apiResponse.data.team.id,
+        apiResponse.data.access_token
+      );
       Log.info('User authenticated');
       res.sendStatus(200);
     } else {

@@ -24,8 +24,10 @@ export const command =
   () =>
     bolt.command(props.name, async (args: SlackCommandMiddlewareArgs) => {
       try {
+        Log.info({ props, args });
         await args.ack();
         const data = await props.action(args.payload);
+        Log.info({ data });
 
         if (!data) {
           throw new Error('Invalid data');
@@ -38,7 +40,7 @@ export const command =
               throw new Error('Invalid data type, expected string');
             }
 
-            await args.say(data);
+            await args.say({ channel: args.command.channel_id, text: data });
             break;
           case CommandType.UPDATE:
             if (!Guard.object<UpdateData>('text', 'ts')(data)) {
