@@ -1,7 +1,4 @@
-import { SlackCommandMiddlewareArgs } from '@slack/bolt';
-
-import { Log } from '../../lib/utils/helpers';
-import { bolt } from '../..';
+import { command } from './helper';
 
 interface CommandInfo {
   command: string;
@@ -20,19 +17,11 @@ const commands: CommandInfo[] = [
 ];
 
 const commandString =
-  'Commands:\n' +
+  '*Commands*:\n' +
   commands
-    .map(command => `*${command.command}*: ${command.description}`)
+    .map(command => `\`${command.command}\`: ${command.description}`)
     .join('\n');
 
-const help = async ({ ack, say }: SlackCommandMiddlewareArgs) => {
-  try {
-    await ack();
-    await say(commandString);
-    Log.info('Help command triggered');
-  } catch (error) {
-    Log.error(error);
-  }
-};
+const help = () => commandString;
 
-export const helpCommand = () => bolt.command('/help', help);
+export const helpCommand = command('/help', help);

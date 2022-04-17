@@ -1,1 +1,1 @@
-export * from './getRandomQuestion';
+export * from './fetchRandomQuestion';
