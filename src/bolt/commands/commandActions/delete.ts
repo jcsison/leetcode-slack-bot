@@ -2,10 +2,9 @@ import { SlashCommand } from '@slack/bolt';
 
 import { Log } from '../../../lib/utils/helpers';
 import { TimeStampedMessageData } from '../helper';
-import { fetchRandomQuestion } from '../../../lib/dataSource/leetcode/actions';
 import { getPreviousQuestionMessage, getToken } from '../../actions';
 
-export const reroll = async (command: SlashCommand) => {
+export const delete_ = async (command: SlashCommand) => {
   try {
     const token = await getToken(
       command.enterprise_id,
@@ -28,19 +27,12 @@ export const reroll = async (command: SlashCommand) => {
       throw new Error('Error fetching previous question message');
     }
 
-    const randomQuestion = await fetchRandomQuestion();
-
-    if (!randomQuestion) {
-      throw new Error('Error fetching random question');
-    }
-
-    const updateData: TimeStampedMessageData = {
-      text: randomQuestion.url,
+    const deleteData: TimeStampedMessageData = {
       ts: previousQuestionMessage.ts
     };
 
-    return updateData;
+    return deleteData;
   } catch (error) {
-    Log.error(error, 'Error rerolling question');
+    Log.error(error, 'Error deleting question');
   }
 };

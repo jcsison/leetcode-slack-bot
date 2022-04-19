@@ -1,12 +1,11 @@
-import { help, reroll, roll } from './commandActions';
+import { delete_, help, reroll, roll, start, stop } from './commandActions';
 import { command, CommandType } from './helper';
 
-export const helpCommand = command({ name: '/help', action: help });
-
-export const rerollCommand = command({
-  name: '/reroll',
-  type: CommandType.UPDATE,
-  action: reroll
-});
-
-export const rollCommand = command({ name: '/roll', action: roll });
+export const commands = [
+  command({ name: '/delete', type: CommandType.DELETE, action: delete_ }),
+  command({ name: '/help', action: help }),
+  command({ name: '/reroll', type: CommandType.UPDATE, action: reroll }),
+  command({ name: '/roll', action: roll }),
+  command({ name: '/start', action: start }),
+  command({ name: '/stop', action: stop })
+];

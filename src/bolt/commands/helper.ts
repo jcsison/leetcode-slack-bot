@@ -1,11 +1,13 @@
-import { Guard, Log } from '../../lib/utils/helpers';
 import { SlackCommandMiddlewareArgs, SlashCommand } from '@slack/bolt';
+
+import { Guard, Log } from '../../lib/utils/helpers';
 import { bolt } from '../..';
 import { getToken } from '../actions';
 
 export enum CommandType {
   POST = 'post',
-  UPDATE = 'update'
+  UPDATE = 'update',
+  DELETE = 'delete'
 }
 
 interface CommandProps {
@@ -16,8 +18,8 @@ interface CommandProps {
   ) => unknown | undefined | Promise<unknown | undefined>;
 }
 
-export interface UpdateData {
-  text: string;
+export interface TimeStampedMessageData {
+  text?: string;
   ts: string;
 }
 
@@ -44,17 +46,19 @@ export const command = (props: CommandProps) => () =>
           });
           break;
         case CommandType.UPDATE:
-          if (!Guard.object<UpdateData>('text', 'ts')(data)) {
-            throw new Error('Invalid data type, expected UpdateData');
+          if (!Guard.object<TimeStampedMessageData>('text', 'ts')(data)) {
+            throw new Error(
+              'Invalid data type, expected TimeStampedMessageData'
+            );
           }
 
-          const token = await getToken(
+          const updateToken = await getToken(
             res.payload.enterprise_id,
             !!res.payload.is_enterprise_install,
             res.payload.team_id
           );
 
-          if (!token) {
+          if (!updateToken) {
             throw new Error('Error fetching token');
           }
 
@@ -62,7 +66,30 @@ export const command = (props: CommandProps) => () =>
             channel: res.command.channel_id,
             text: data.text,
             ts: data.ts,
-            token
+            token: updateToken
+          });
+          break;
+        case CommandType.DELETE:
+          if (!Guard.object<TimeStampedMessageData>('ts')(data)) {
+            throw new Error(
+              'Invalid data type, expected TimeStampedMessageData'
+            );
+          }
+
+          const deleteToken = await getToken(
+            res.payload.enterprise_id,
+            !!res.payload.is_enterprise_install,
+            res.payload.team_id
+          );
+
+          if (!deleteToken) {
+            throw new Error('Error fetching token');
+          }
+
+          await bolt.client.chat.delete({
+            channel: res.command.channel_id,
+            ts: data.ts,
+            token: deleteToken
           });
           break;
       }

@@ -23,9 +23,9 @@ export const getPreviousQuestionMessage = async (
     if (previousMessage?.reply_count) {
       await bolt.client.chat.postEphemeral({
         channel: channelId,
-        text: 'Error: Previous question message already has replies',
-        user: userId,
-        token
+        text: 'Error: Previous question message already has replies!',
+        token,
+        user: userId
       });
       throw new Error('Previous question message already has replies');
     }

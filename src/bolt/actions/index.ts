@@ -1,4 +1,4 @@
 export * from './getChannels';
-export * from './getInstallationStore';
+export * from './getInstallation';
 export * from './getPreviousQuestionMessage';
 export * from './getToken';

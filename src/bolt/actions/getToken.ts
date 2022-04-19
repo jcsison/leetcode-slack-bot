@@ -1,5 +1,5 @@
 import { Log } from '../../lib/utils/helpers';
-import { getInstallationStore } from '.';
+import { getInstallation } from '.';
 
 export const getToken = async (
   enterpriseId: string | undefined,
@@ -7,7 +7,7 @@ export const getToken = async (
   teamId: string
 ) => {
   try {
-    const installation = await getInstallationStore().fetchInstallation({
+    const installation = await getInstallation({
       enterpriseId,
       isEnterpriseInstall,
       teamId

@@ -1,4 +1,3 @@
-import { Installation } from '@slack/bolt';
 import { RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
 
 import { Log } from '../../lib/utils/helpers';
@@ -9,24 +8,24 @@ import { fetchRandomQuestion } from '../../lib/dataSource/leetcode/actions';
 import { getChannels } from '../actions/getChannels';
 
 class PostQuestion {
-  rule: RecurrenceSpecObjLit = { hour: 18 };
+  rule: RecurrenceSpecObjLit = { hour: 1 }; // 01:00 UTC / 18:00 PDT
   fn = async () => {
     try {
-      const installationGroup = await dbRead<ObjectGroup<Installation>>(
-        '/installation'
+      const postChannelsData = await dbRead<ObjectGroup<string>>(
+        '/postChannel'
       );
 
-      const installations = Object.entries(installationGroup);
-
-      if (!installations.length) {
-        throw new Error('Error fetching installations');
+      if (!postChannelsData) {
+        throw new Error('Error fetching channels');
       }
 
-      installations.forEach(async installation => {
-        const token = installation[1].bot?.token;
+      const postChannels = Object.entries(postChannelsData);
+
+      postChannels.forEach(async postChannel => {
+        const token = postChannel[1];
 
         if (!token) {
-          Log.error(`Error fetching token for ${installation[0]}`);
+          Log.error(`Error fetching token for ${postChannel[0]}`);
           return;
         }
 
@@ -41,7 +40,8 @@ class PostQuestion {
           if (channel.id) {
             await bolt.client.chat.postMessage({
               channel: channel.id,
-              text: randomQuestion.url
+              text: randomQuestion.url,
+              token
             });
 
             Log.info(
