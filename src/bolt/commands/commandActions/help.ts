@@ -14,7 +14,7 @@ const commands: CommandInfo[] = [
   },
   {
     command: '/reroll',
-    description: 'Rerolls the last LeetCode problem'
+    description: 'Rerolls the last LeetCode problem (if it has no replies)'
   }
 ];
 

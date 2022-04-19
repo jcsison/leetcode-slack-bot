@@ -1,6 +1,7 @@
 import { Guard, Log } from '../../lib/utils/helpers';
 import { SlackCommandMiddlewareArgs, SlashCommand } from '@slack/bolt';
 import { bolt } from '../..';
+import { getToken } from '../actions';
 
 export enum CommandType {
   POST = 'post',
@@ -47,10 +48,21 @@ export const command = (props: CommandProps) => () =>
             throw new Error('Invalid data type, expected UpdateData');
           }
 
+          const token = await getToken(
+            res.payload.enterprise_id,
+            !!res.payload.is_enterprise_install,
+            res.payload.team_id
+          );
+
+          if (!token) {
+            throw new Error('Error fetching token');
+          }
+
           await bolt.client.chat.update({
             channel: res.command.channel_id,
             text: data.text,
-            ts: data.ts
+            ts: data.ts,
+            token
           });
           break;
       }

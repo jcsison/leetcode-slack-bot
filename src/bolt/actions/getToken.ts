@@ -17,7 +17,7 @@ export const getToken = async (
       throw new Error('Error fetching bot user');
     }
 
-    return installation.bot?.token;
+    return installation.bot.token;
   } catch (e) {
     Log.error('Error fetching token');
   }

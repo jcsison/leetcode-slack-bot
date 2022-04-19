@@ -3,14 +3,25 @@ import { SlashCommand } from '@slack/bolt';
 import { Log } from '../../../lib/utils/helpers';
 import { UpdateData } from '../helper';
 import { fetchRandomQuestion } from '../../../lib/dataSource/leetcode/actions';
-import { getPreviousQuestionMessage } from '../../actions';
+import { getPreviousQuestionMessage, getToken } from '../../actions';
 
 export const reroll = async (command: SlashCommand) => {
   try {
+    const token = await getToken(
+      command.enterprise_id,
+      !!command.is_enterprise_install,
+      command.team_id
+    );
+
+    if (!token) {
+      throw new Error('Error fetching token');
+    }
+
     const previousQuestionMessage = await getPreviousQuestionMessage(
       command.channel_id,
       command.api_app_id,
-      command.user_id
+      command.user_id,
+      token
     );
 
     if (!previousQuestionMessage || !previousQuestionMessage.ts) {

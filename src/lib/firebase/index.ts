@@ -1,6 +1,14 @@
-import { onValue, ref, remove, set } from 'firebase/database';
+import {
+  get,
+  onValue,
+  orderByKey,
+  query,
+  ref,
+  remove,
+  set
+} from 'firebase/database';
 
-import { Log } from '../utils/helpers';
+import { Guard, Log } from '../utils/helpers';
 import { db } from '../..';
 
 export const dbStore = async (key: string, value: unknown) => {
@@ -29,5 +37,20 @@ export const dbDelete = async (key: string) => {
     await remove(ref(db, key));
   } catch (error) {
     Log.error(error, 'Error deleting data from db');
+  }
+};
+
+export const dbGetObjectKeys = async (key: string) => {
+  try {
+    const objectKeysSnapshot = await get(query(ref(db, key), orderByKey()));
+    const objectKeys = objectKeysSnapshot.val();
+
+    if (!Guard.array(Guard.string)(objectKeys)) {
+      throw new Error('Invalid object keys type');
+    }
+
+    return objectKeys;
+  } catch (error) {
+    Log.error(error, 'Error getting keys from db');
   }
 };

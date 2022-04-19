@@ -59,11 +59,6 @@ const startBolt = async () => {
 
 bolt.error((error: CodedError) => new Promise(() => Log.error(error)));
 
-bolt.command('/test', async ({ ack, say }) => {
-  await ack();
-  await say('This is a test!');
-});
-
 bolt.message('knock knock', async ({ say }) => {
   await say("_Who's there?_");
 });
