@@ -8,7 +8,7 @@ import { fetchRandomQuestion } from '../../lib/dataSource/leetcode/actions';
 import { getChannels } from '../actions/getChannels';
 
 class PostQuestion {
-  rule: RecurrenceSpecObjLit = { hour: 1 }; // 01:00 UTC / 18:00 PDT
+  rule: RecurrenceSpecObjLit = { hour: 1, minute: 0, second: 0 }; // 01:00 UTC / 18:00 PDT
   fn = async () => {
     try {
       const postChannelsData = await dbRead<ObjectGroup<string>>(
