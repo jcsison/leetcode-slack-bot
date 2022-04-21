@@ -3,7 +3,7 @@ import { SlashCommand } from '@slack/bolt';
 import { Log } from '../../../lib/utils/helpers';
 import { TimeStampedMessageData } from '../helper';
 import { getPreviousQuestionMessage, getToken } from '../../actions';
-import { getRandomQuestion } from '../../../lib/dataSource/leetcode/actions';
+import { roll } from './roll';
 
 export const reroll = async (command: SlashCommand) => {
   try {
@@ -18,8 +18,8 @@ export const reroll = async (command: SlashCommand) => {
     }
 
     const previousQuestionMessage = await getPreviousQuestionMessage(
-      command.channel_id,
       command.api_app_id,
+      command.channel_id,
       command.user_id,
       token
     );
@@ -28,14 +28,14 @@ export const reroll = async (command: SlashCommand) => {
       throw new Error('Error fetching previous question message');
     }
 
-    const randomQuestion = await getRandomQuestion();
+    const rolledQuestionUrl = await roll(command);
 
-    if (!randomQuestion) {
-      throw new Error('Error fetching random question');
+    if (!rolledQuestionUrl) {
+      throw new Error('Error rolling question');
     }
 
     const updateData: TimeStampedMessageData = {
-      text: randomQuestion.url,
+      text: rolledQuestionUrl,
       ts: previousQuestionMessage.ts
     };
 

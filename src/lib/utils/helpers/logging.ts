@@ -21,11 +21,7 @@ export const error = (
   }
 };
 
-export const info = (
-  info: unknown,
-  message?: string,
-  ...params: unknown[]
-) => {
+export const info = (info: unknown, message?: string, ...params: unknown[]) => {
   if (message) {
     logger.info(info, message, ...params);
   } else {

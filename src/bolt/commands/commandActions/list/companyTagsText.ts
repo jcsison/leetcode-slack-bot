@@ -6,7 +6,9 @@ import { getCompanyTags } from '../../../../lib/dataSource/leetcode/actions/getC
 
 export const companyTagsText = async (page: number) => {
   try {
-    const tags = await getCompanyTags();
+    const tags = (await getCompanyTags())?.sort((a, b) =>
+      a.slug > b.slug ? 1 : -1
+    );
 
     if (!tags) {
       throw new Error('Error fetching company tags');

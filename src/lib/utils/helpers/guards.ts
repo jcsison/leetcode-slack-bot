@@ -5,6 +5,8 @@ export const array =
   (o: unknown): o is T[] =>
     !!guard ? Array.isArray(o) && o.every(guard) : Array.isArray(o);
 
+export const filter = <T>(o: unknown[], guard: Guard<T>) => o.filter(guard);
+
 export const object =
   <T extends object>(...properties: Array<keyof T>): Guard<T> =>
   (o: unknown): o is T =>

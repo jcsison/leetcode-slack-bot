@@ -1,10 +1,11 @@
 import { Log } from '../../lib/utils/helpers';
 import { bolt } from '../..';
+import { postError } from '.';
 import { uri } from '../../lib/dataSource/leetcode/graphql/config';
 
 export const getPreviousQuestionMessage = async (
-  channelId: string,
   appId: string,
+  channelId: string,
   userId: string,
   token: string
 ) => {
@@ -21,13 +22,12 @@ export const getPreviousQuestionMessage = async (
     );
 
     if (previousMessage?.reply_count) {
-      await bolt.client.chat.postEphemeral({
-        channel: channelId,
-        text: 'Error: Previous question message already has replies!',
+      await postError(
+        'Previous question message already has replies',
+        channelId,
         token,
-        user: userId
-      });
-      throw new Error('Previous question message already has replies');
+        userId
+      );
     }
 
     return previousMessage;

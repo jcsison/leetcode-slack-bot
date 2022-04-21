@@ -6,7 +6,7 @@ import { getTopicTags } from '../../../../lib/dataSource/leetcode/actions';
 
 export const topicTagsText = (page: number) => {
   try {
-    const tags = getTopicTags();
+    const tags = getTopicTags()?.sort((a, b) => (a.slug > b.slug ? 1 : -1));
 
     if (!tags) {
       throw new Error('Error fetching topic tags');

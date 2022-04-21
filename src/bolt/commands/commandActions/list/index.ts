@@ -1,5 +1,4 @@
 import { SlashCommand } from '@slack/bolt';
-import { Log } from '../../../../lib/utils/helpers';
 
 import { LeetCodeTypes } from '../../../../lib/utils/types';
 import { companyTagsText } from './companyTagsText';
@@ -23,7 +22,7 @@ const commands: LeetCodeTypes.CommandInfo[] = [
 
 const helpString = () =>
   '```\n' +
-  'Usage: /list [filter] [page]\n' +
+  'Usage: /list [type] [page]\n' +
   commands
     .map(command => `  ${command.command} - ${command.description}`)
     .join('\n') +

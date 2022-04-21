@@ -17,8 +17,8 @@ export const delete_ = async (command: SlashCommand) => {
     }
 
     const previousQuestionMessage = await getPreviousQuestionMessage(
-      command.channel_id,
       command.api_app_id,
+      command.channel_id,
       command.user_id,
       token
     );
