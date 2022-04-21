@@ -1,13 +1,16 @@
 import { SlashCommand } from '@slack/bolt';
-import { dbDelete, DBKey, dbRead } from '../../../lib/firebase';
 
+import { DBTypes } from '../../../lib/utils/types';
 import { Log } from '../../../lib/utils/helpers';
+import { dbDelete, DBKey, dbRead } from '../../../lib/firebase';
 
 export const stop = async (command: SlashCommand) => {
   try {
     const channelId = command.channel_id;
 
-    const willPost = await dbRead<boolean>(DBKey.POST_CHANNEL + channelId);
+    const willPost = await dbRead<DBTypes.PostChannel>(
+      DBKey.POST_CHANNEL + channelId
+    );
 
     if (!willPost) {
       return 'Daily question posting is already stopped.';

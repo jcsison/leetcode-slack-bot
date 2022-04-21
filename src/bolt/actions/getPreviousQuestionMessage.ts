@@ -1,7 +1,7 @@
 import { Log } from '../../lib/utils/helpers';
 import { bolt } from '../..';
 import { postError } from '.';
-import { uri } from '../../lib/dataSource/leetcode/graphql/config';
+import { validateLeetCodeUrl } from '../../lib/dataSource/leetcode/helpers';
 
 export const getPreviousQuestionMessage = async (
   appId: string,
@@ -14,11 +14,13 @@ export const getPreviousQuestionMessage = async (
       channel: channelId,
       token
     });
+
     const messages = conversations.messages?.filter(
       message => message.bot_profile?.app_id === appId
     );
+
     const previousMessage = messages?.find(message =>
-      message.text?.includes(uri.problem(''))
+      validateLeetCodeUrl(message.text)
     );
 
     if (previousMessage?.reply_count) {

@@ -1,6 +1,7 @@
-import { scheduledJobs, startCommands } from './listeners';
+import { startCommands, startEvents, startJobs } from './listeners';
 
 export const launchBolt = () => {
   startCommands();
-  scheduledJobs();
+  startEvents();
+  startJobs();
 };
