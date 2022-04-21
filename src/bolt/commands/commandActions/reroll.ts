@@ -2,8 +2,8 @@ import { SlashCommand } from '@slack/bolt';
 
 import { Log } from '../../../lib/utils/helpers';
 import { TimeStampedMessageData } from '../helper';
-import { fetchRandomQuestion } from '../../../lib/dataSource/leetcode/actions';
 import { getPreviousQuestionMessage, getToken } from '../../actions';
+import { getRandomQuestion } from '../../../lib/dataSource/leetcode/actions';
 
 export const reroll = async (command: SlashCommand) => {
   try {
@@ -28,7 +28,7 @@ export const reroll = async (command: SlashCommand) => {
       throw new Error('Error fetching previous question message');
     }
 
-    const randomQuestion = await fetchRandomQuestion();
+    const randomQuestion = await getRandomQuestion();
 
     if (!randomQuestion) {
       throw new Error('Error fetching random question');

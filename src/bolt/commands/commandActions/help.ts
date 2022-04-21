@@ -1,9 +1,6 @@
-interface CommandInfo {
-  command: string;
-  description: string;
-}
+import { LeetCodeTypes } from '../../../lib/utils/types';
 
-const commands: CommandInfo[] = [
+const commands: LeetCodeTypes.CommandInfo[] = [
   {
     command: '/help',
     description: 'Displays a list of commands'
@@ -29,13 +26,19 @@ const commands: CommandInfo[] = [
   {
     command: '/stop',
     description: 'Stops posting daily LeetCode problems to channel'
+  },
+  {
+    command: '/list',
+    description: 'Lists available problem filters'
   }
 ];
 
-const commandString =
-  '*Commands*:\n' +
+const helpString =
+  '```\n' +
+  'Commands:\n' +
   commands
-    .map(command => `\`${command.command}\`: ${command.description}`)
-    .join('\n');
+    .map(command => `  ${command.command} - ${command.description}`)
+    .join('\n') +
+  '\n```';
 
-export const help = () => commandString;
+export const help = () => helpString;

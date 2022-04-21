@@ -15,3 +15,6 @@ export const object =
 
 export const string: Guard<string> = (o: unknown): o is string =>
   typeof o === 'string';
+
+export const validate = <T>(o: unknown, guard: Guard<T>) =>
+  guard(o) ? o : undefined;

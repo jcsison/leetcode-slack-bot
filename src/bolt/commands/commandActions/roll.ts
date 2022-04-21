@@ -1,9 +1,9 @@
 import { Log } from '../../../lib/utils/helpers';
-import { fetchRandomQuestion } from '../../../lib/dataSource/leetcode/actions';
+import { getRandomQuestion } from '../../../lib/dataSource/leetcode/actions';
 
 export const roll = async () => {
   try {
-    const randomQuestion = await fetchRandomQuestion();
+    const randomQuestion = await getRandomQuestion();
 
     if (!randomQuestion) {
       throw new Error('Error fetching random question');

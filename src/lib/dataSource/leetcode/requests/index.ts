@@ -1,1 +1,4 @@
-export * from './getRandomQuestion';
+import { companyTags } from './companyTags'
+import { randomQuestion } from './randomQuestion';
+
+export const Requests = { companyTags, randomQuestion };

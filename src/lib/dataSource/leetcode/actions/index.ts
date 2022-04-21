@@ -1,1 +1,2 @@
-export * from './fetchRandomQuestion';
+export * from './getRandomQuestion';
+export * from './getTopicTags';

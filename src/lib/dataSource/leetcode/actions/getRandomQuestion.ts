@@ -1,9 +1,9 @@
 import { Constants, Enums, LeetCodeTypes, Maybe } from '../../../utils/types';
 import { Log } from '../../../utils/helpers';
-import { getRandomQuestion } from '../requests';
+import { Requests } from '../requests';
 import { uri } from '../graphql/config';
 
-export const fetchRandomQuestion = async () => {
+export const getRandomQuestion = async () => {
   try {
     let fetchAttempts = Constants.MAX_FETCH_ATTEMPTS;
     let randomQuestion: Maybe<LeetCodeTypes.Question> = undefined;
@@ -13,7 +13,9 @@ export const fetchRandomQuestion = async () => {
       (!randomQuestion || randomQuestion.isPaidOnly) &&
       fetchAttempts > 0
     ) {
-      randomQuestion = await getRandomQuestion(Enums.QuestionDifficulty.EASY);
+      randomQuestion = await Requests.randomQuestion(
+        Enums.QuestionDifficulty.EASY
+      );
       fetchAttempts--;
     }
 

@@ -4,8 +4,8 @@ import { Log } from '../../lib/utils/helpers';
 import { ObjectGroup } from '../../lib/utils/types';
 import { bolt } from '../..';
 import { dbRead } from '../../lib/firebase';
-import { fetchRandomQuestion } from '../../lib/dataSource/leetcode/actions';
 import { getChannels } from '../actions/getChannels';
+import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions';
 
 class PostQuestion {
   rule: RecurrenceSpecObjLit = { hour: 1, minute: 0, second: 0 }; // 01:00 UTC / 18:00 PDT
@@ -30,7 +30,7 @@ class PostQuestion {
         }
 
         const channels = await getChannels(token);
-        const randomQuestion = await fetchRandomQuestion();
+        const randomQuestion = await getRandomQuestion();
 
         if (!randomQuestion) {
           throw new Error('Error fetching question');

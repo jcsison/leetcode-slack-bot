@@ -36,14 +36,23 @@ export const command = (props: CommandProps) => () =>
       switch (props.type) {
         case CommandType.POST:
         default:
-          if (!Guard.string(data)) {
+          if (!(Guard.string(data) || Guard.array(Guard.string)(data))) {
             throw new Error('Invalid data type, expected string');
           }
 
-          await res.say({
-            channel: res.command.channel_id,
-            text: data
-          });
+          if (Guard.array()(data)) {
+            for (const dataText of data) {
+              await res.say({
+                channel: res.command.channel_id,
+                text: dataText
+              });
+            }
+          } else {
+            await res.say({
+              channel: res.command.channel_id,
+              text: data
+            });
+          }
           break;
         case CommandType.UPDATE:
           if (!Guard.object<TimeStampedMessageData>('text', 'ts')(data)) {
