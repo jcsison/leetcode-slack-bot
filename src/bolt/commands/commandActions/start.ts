@@ -1,8 +1,8 @@
 import { SlashCommand } from '@slack/bolt';
 
-import { DBKey, dbRead, dbStore } from '../../../lib/firebase';
 import { DBTypes } from '../../../lib/utils/types';
 import { Log } from '../../../lib/utils/helpers';
+import { createPath, DBKey, dbRead, dbStore } from '../../../lib/firebase';
 import { getToken } from '../../actions';
 
 export const start = async (command: SlashCommand) => {
@@ -20,7 +20,7 @@ export const start = async (command: SlashCommand) => {
     const channelId = command.channel_id;
 
     const postChannelToken = await dbRead<DBTypes.PostChannel>(
-      DBKey.POST_CHANNEL + channelId
+      createPath(DBKey.POST_CHANNEL, channelId)
     );
 
     if (!!postChannelToken) {
@@ -31,7 +31,7 @@ export const start = async (command: SlashCommand) => {
       token
     };
 
-    await dbStore(DBKey.POST_CHANNEL + channelId, postChannel);
+    await dbStore(createPath(DBKey.POST_CHANNEL, channelId), postChannel);
 
     return 'LeetCode Bot will now post daily questions in this channel.';
   } catch (error) {

@@ -4,18 +4,20 @@ import { Log } from '../../../lib/utils/helpers';
 import { bolt } from '../../..';
 import { getMessage, getTokenByChannel } from '../../actions';
 import { solutionPosted } from './solutionPosted';
-import { validateLeetCodeUrl } from '../../../lib/dataSource/leetcode/helpers';
+import { validateLeetCodeUrl } from '../../../lib/dataSource/leetcode';
 
 const message: Middleware<SlackEventMiddlewareArgs<'message'>> = async ({
   message
 }) => {
   try {
+    Log.info(message);
     const token = await getTokenByChannel(message.channel);
 
     if (!token) {
       throw new Error('Error fetching token');
     }
 
+    // Handle solutions posted as a reply to a question
     if (message.subtype === 'file_share' && message.thread_ts) {
       const parentMessage = await getMessage(
         message.thread_ts,
@@ -28,7 +30,7 @@ const message: Middleware<SlackEventMiddlewareArgs<'message'>> = async ({
       }
 
       if (validateLeetCodeUrl(parentMessage.text)) {
-        await solutionPosted(message, token);
+        return await solutionPosted(message, token);
       }
     }
   } catch (error) {

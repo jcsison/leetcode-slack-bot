@@ -5,7 +5,7 @@ import {
 } from '@slack/bolt';
 
 import { Log } from '../../lib/utils/helpers';
-import { dbDelete, DBKey, dbStore } from '../../lib/firebase';
+import { createPath, dbDelete, DBKey, dbStore } from '../../lib/firebase';
 import { dbUnsafeRead } from '../../lib/firebase/actions';
 
 export class LCFileInstallationStore extends FileInstallationStore {
@@ -13,12 +13,12 @@ export class LCFileInstallationStore extends FileInstallationStore {
     try {
       if (installation.isEnterpriseInstall && installation.enterprise?.id) {
         await dbStore(
-          DBKey.INSTALLATION + installation.enterprise.id,
+          createPath(DBKey.INSTALLATION, installation.enterprise.id),
           JSON.parse(JSON.stringify(installation))
         );
       } else if (installation.team?.id) {
         await dbStore(
-          DBKey.INSTALLATION + installation.team.id,
+          createPath(DBKey.INSTALLATION, installation.team.id),
           JSON.parse(JSON.stringify(installation))
         );
       }
@@ -30,11 +30,11 @@ export class LCFileInstallationStore extends FileInstallationStore {
     try {
       if (query.isEnterpriseInstall && query.enterpriseId) {
         return await dbUnsafeRead<Installation>(
-          DBKey.INSTALLATION + query.enterpriseId
+          createPath(DBKey.INSTALLATION, query.enterpriseId)
         );
       } else if (query.teamId) {
         return await dbUnsafeRead<Installation>(
-          DBKey.INSTALLATION + query.teamId
+          createPath(DBKey.INSTALLATION, query.teamId)
         );
       } else {
         throw new Error('Enterprise ID and team ID not found');
@@ -47,9 +47,9 @@ export class LCFileInstallationStore extends FileInstallationStore {
   deleteInstallation = async (query: InstallationQuery<boolean>) => {
     try {
       if (query.isEnterpriseInstall && query.enterpriseId) {
-        await dbDelete(query.enterpriseId);
+        await dbDelete(createPath(DBKey.INSTALLATION, query.enterpriseId));
       } else if (query.teamId) {
-        await dbDelete(query.teamId);
+        await dbDelete(createPath(DBKey.INSTALLATION, query.teamId));
       } else {
         throw new Error('Enterprise ID and team ID not found');
       }

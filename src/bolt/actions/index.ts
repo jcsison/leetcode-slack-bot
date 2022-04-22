@@ -1,3 +1,4 @@
+export * from './addReaction';
 export * from './getChannels';
 export * from './getInstallation';
 export * from './getInstallationByChannel';

@@ -7,14 +7,19 @@ export const getMessage = async (
   token: string
 ) => {
   try {
-    const conversations = await bolt.client.conversations.history({
+    const messagesResult = await bolt.client.conversations.history({
       channel: channelId,
+      inclusive: true,
+      latest: messageTs,
+      limit: 1,
       token
     });
 
-    const message = conversations.messages?.find(
-      message => message.ts === messageTs
-    );
+    const message = messagesResult.messages?.[0];
+
+    if (!message) {
+      throw new Error('Message not found');
+    }
 
     return message;
   } catch (error) {

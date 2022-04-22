@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { App, CodedError, ExpressReceiver, LogLevel } from '@slack/bolt';
+import { App, CodedError, ExpressReceiver } from '@slack/bolt';
 import { getDatabase } from 'firebase/database';
 import { initializeApp } from 'firebase/app';
 
@@ -33,8 +33,7 @@ export const receiver = new ExpressReceiver({
 });
 
 export const bolt = new App({
-  receiver,
-  logLevel: LogLevel.DEBUG
+  receiver
 });
 
 export const firebase = initializeApp({

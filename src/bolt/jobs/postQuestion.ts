@@ -1,9 +1,9 @@
 import { RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
 
 import { Log } from '../../lib/utils/helpers';
-import { ObjectGroup } from '../../lib/utils/types';
+import { DBTypes, ObjectGroup } from '../../lib/utils/types';
 import { bolt } from '../..';
-import { dbRead } from '../../lib/firebase';
+import { DBKey, dbRead } from '../../lib/firebase';
 import { getChannels } from '../actions/getChannels';
 import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions';
 
@@ -11,8 +11,8 @@ class PostQuestion {
   rule: RecurrenceSpecObjLit = { hour: 1, minute: 0, second: 0 }; // 01:00 UTC / 18:00 PDT
   fn = async () => {
     try {
-      const postChannelsData = await dbRead<ObjectGroup<string>>(
-        '/postChannel'
+      const postChannelsData = await dbRead<ObjectGroup<DBTypes.PostChannel>>(
+        DBKey.POST_CHANNEL
       );
 
       if (!postChannelsData) {
@@ -21,11 +21,12 @@ class PostQuestion {
 
       const postChannels = Object.entries(postChannelsData);
 
-      postChannels.forEach(async postChannel => {
-        const token = postChannel[1];
+      postChannels.forEach(async postChannelEntry => {
+        const postChannel = postChannelEntry[1];
+        const token = postChannel.token;
 
         if (!token) {
-          Log.error(`Error fetching token for ${postChannel[0]}`);
+          Log.error(`Error fetching token for ${postChannelEntry[0]}`);
           return;
         }
 

@@ -1,7 +1,7 @@
 import { Log } from '../../lib/utils/helpers';
 import { bolt } from '../..';
 import { postError } from '.';
-import { validateLeetCodeUrl } from '../../lib/dataSource/leetcode/helpers';
+import { validateLeetCodeUrl } from '../../lib/dataSource/leetcode';
 
 export const getPreviousQuestionMessage = async (
   appId: string,
