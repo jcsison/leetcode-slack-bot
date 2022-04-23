@@ -13,6 +13,6 @@ export interface SubmittedSolution {
 export interface Question {
   handle: string;
   messageTs: string;
-  submittedSolution: ObjectGroup<SubmittedSolution>;
+  submittedSolutions: ObjectGroup<ObjectGroup<SubmittedSolution>>;
   url: string;
 }

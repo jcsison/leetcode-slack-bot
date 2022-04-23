@@ -13,12 +13,12 @@ export class LCFileInstallationStore extends FileInstallationStore {
     try {
       if (installation.isEnterpriseInstall && installation.enterprise?.id) {
         await dbStore(
-          createPath(DBKey.INSTALLATION, installation.enterprise.id),
+          createPath(DBKey.INSTALLATIONS, installation.enterprise.id),
           JSON.parse(JSON.stringify(installation))
         );
       } else if (installation.team?.id) {
         await dbStore(
-          createPath(DBKey.INSTALLATION, installation.team.id),
+          createPath(DBKey.INSTALLATIONS, installation.team.id),
           JSON.parse(JSON.stringify(installation))
         );
       }
@@ -30,11 +30,11 @@ export class LCFileInstallationStore extends FileInstallationStore {
     try {
       if (query.isEnterpriseInstall && query.enterpriseId) {
         return await dbUnsafeRead<Installation>(
-          createPath(DBKey.INSTALLATION, query.enterpriseId)
+          createPath(DBKey.INSTALLATIONS, query.enterpriseId)
         );
       } else if (query.teamId) {
         return await dbUnsafeRead<Installation>(
-          createPath(DBKey.INSTALLATION, query.teamId)
+          createPath(DBKey.INSTALLATIONS, query.teamId)
         );
       } else {
         throw new Error('Enterprise ID and team ID not found');
@@ -47,9 +47,9 @@ export class LCFileInstallationStore extends FileInstallationStore {
   deleteInstallation = async (query: InstallationQuery<boolean>) => {
     try {
       if (query.isEnterpriseInstall && query.enterpriseId) {
-        await dbDelete(createPath(DBKey.INSTALLATION, query.enterpriseId));
+        await dbDelete(createPath(DBKey.INSTALLATIONS, query.enterpriseId));
       } else if (query.teamId) {
-        await dbDelete(createPath(DBKey.INSTALLATION, query.teamId));
+        await dbDelete(createPath(DBKey.INSTALLATIONS, query.teamId));
       } else {
         throw new Error('Enterprise ID and team ID not found');
       }

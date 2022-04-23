@@ -9,16 +9,19 @@ import {
   DBKey,
   DBQuestionKey,
   dbRead,
-  dbStore
+  dbStore,
+  DBTypeKey
 } from '../../../lib/firebase';
 import { parseHandleFromMessage, parseUrlFromMessage } from '../../utils';
+import { Message } from '@slack/web-api/dist/response/ChatPostMessageResponse';
 
 export const solutionPosted = async (
-  message: FileShareMessageEvent,
+  channelId: string,
+  message: FileShareMessageEvent | Message,
   token: string
 ) => {
   try {
-    if (!message.thread_ts) {
+    if (!message.thread_ts || !message.ts || !message.user) {
       throw new Error('Invalid solution');
     }
 
@@ -30,8 +33,10 @@ export const solutionPosted = async (
 
     const questionDB = await dbRead<DBTypes.Question>(
       createPath(
-        DBKey.QUESTION,
-        message.channel,
+        DBKey.QUESTIONS,
+        DBTypeKey.CHANNELS,
+        channelId,
+        DBTypeKey.MESSAGES,
         convertToPathTs(message.thread_ts)
       )
     );
@@ -39,10 +44,13 @@ export const solutionPosted = async (
     if (questionDB) {
       await dbStore(
         createPath(
-          DBKey.QUESTION,
-          message.channel,
+          DBKey.QUESTIONS,
+          DBTypeKey.CHANNELS,
+          channelId,
+          DBTypeKey.MESSAGES,
           convertToPathTs(message.thread_ts),
-          DBQuestionKey.SUBMITTED_SOLUTION,
+          DBQuestionKey.SUBMITTED_SOLUTIONS,
+          DBTypeKey.USERS,
           message.user
         ),
         submittedSolution
@@ -50,7 +58,7 @@ export const solutionPosted = async (
     } else {
       const questionMessage = await getMessage(
         message.thread_ts,
-        message.channel,
+        channelId,
         token
       );
 
@@ -72,14 +80,19 @@ export const solutionPosted = async (
       const question: DBTypes.Question = {
         handle: questionHandle,
         messageTs: questionMessage.ts,
-        submittedSolution: createObjectGroup(message.user, submittedSolution),
+        submittedSolutions: createObjectGroup(
+          'users',
+          createObjectGroup(message.user, submittedSolution)
+        ),
         url: questionUrl
       };
 
       await dbStore(
         createPath(
-          DBKey.QUESTION,
-          message.channel,
+          DBKey.QUESTIONS,
+          DBTypeKey.CHANNELS,
+          channelId,
+          DBTypeKey.MESSAGES,
           convertToPathTs(message.thread_ts)
         ),
         question
@@ -87,13 +100,13 @@ export const solutionPosted = async (
 
       await addReaction(
         'heavy_check_mark',
-        message.channel,
+        channelId,
         message.thread_ts,
         token
       );
     }
 
-    await addReaction('white_check_mark', message.channel, message.ts, token);
+    await addReaction('white_check_mark', channelId, message.ts, token);
 
     Log.info('Solution posted');
   } catch (error) {

@@ -26,6 +26,7 @@ export const receiver = new ExpressReceiver({
     'im:read',
     'incoming-webhook',
     'mpim:read',
+    'reactions:read',
     'reactions:write'
   ],
   signingSecret: process.env.SLACK_SIGNING_SECRET ?? '',

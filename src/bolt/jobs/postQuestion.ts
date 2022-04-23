@@ -12,7 +12,7 @@ class PostQuestion {
   fn = async () => {
     try {
       const postChannelsData = await dbRead<ObjectGroup<DBTypes.PostChannel>>(
-        DBKey.POST_CHANNEL
+        DBKey.POST_CHANNELS
       );
 
       if (!postChannelsData) {

@@ -4,7 +4,7 @@ import { RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
 import { Log } from '../../lib/utils/helpers';
 
 class IntervalPing {
-  rule: RecurrenceSpecObjLit = { minute: [0, 30] };
+  rule: RecurrenceSpecObjLit = { minute: [0, 20, 40] };
   fn = async () => {
     try {
       if (process.env.APP_URL) {

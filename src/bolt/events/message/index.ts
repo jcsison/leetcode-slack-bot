@@ -30,7 +30,9 @@ const message: Middleware<SlackEventMiddlewareArgs<'message'>> = async ({
       }
 
       if (validateLeetCodeUrl(parentMessage.text)) {
-        return await solutionPosted(message, token);
+        return await solutionPosted(message.channel, message, token);
+      } else {
+        throw new Error('Error validating url');
       }
     }
   } catch (error) {

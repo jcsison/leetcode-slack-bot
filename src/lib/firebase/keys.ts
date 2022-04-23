@@ -1,7 +1,7 @@
 export enum DBKey {
-  INSTALLATION = 'installation',
-  POST_CHANNEL = 'postChannel',
-  QUESTION = 'question'
+  INSTALLATIONS = 'installations',
+  POST_CHANNELS = 'postChannels',
+  QUESTIONS = 'questions'
 }
 
 export enum DBInstallationKey {
@@ -9,5 +9,11 @@ export enum DBInstallationKey {
 }
 
 export enum DBQuestionKey {
-  SUBMITTED_SOLUTION = 'submittedSolution'
+  SUBMITTED_SOLUTIONS = 'submittedSolutions'
+}
+
+export enum DBTypeKey {
+  CHANNELS = 'channels',
+  MESSAGES = 'messages',
+  USERS = 'users'
 }

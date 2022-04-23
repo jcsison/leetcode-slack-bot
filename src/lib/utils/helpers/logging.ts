@@ -13,18 +13,24 @@ export const error = (
   ...params: unknown[]
 ) => {
   if (Guard.object<DataError>('name', 'message', 'data')(error)) {
-    logger.error(error, message, error.message, error.data, ...params);
+    logger.error(
+      JSON.stringify(error),
+      message,
+      error.message,
+      error.data,
+      ...params
+    );
   } else if (Guard.object<Error>('name', 'message')(error)) {
-    logger.error(error, message, ...params);
+    logger.error(JSON.stringify(error), message, ...params);
   } else {
-    logger.error(error, message, ...params);
+    logger.error(JSON.stringify(error), message, ...params);
   }
 };
 
 export const info = (info: unknown, message?: string, ...params: unknown[]) => {
   if (message) {
-    logger.info(info, message, ...params);
+    logger.info(JSON.stringify(info), message, ...params);
   } else {
-    logger.info(info, undefined, ...params);
+    logger.info(JSON.stringify(info), undefined, ...params);
   }
 };

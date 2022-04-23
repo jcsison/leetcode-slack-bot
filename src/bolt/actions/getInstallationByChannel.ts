@@ -7,7 +7,7 @@ import { dbFindByChildKeyValue } from '../../lib/firebase/actions';
 export const getInstallationByChannel = async (channelId: string) => {
   try {
     const installation = await dbFindByChildKeyValue<Installation>(
-      DBKey.INSTALLATION,
+      DBKey.INSTALLATIONS,
       createPath(DBInstallationKey.INCOMING_WEBHOOK, 'channelId'),
       channelId
     );
