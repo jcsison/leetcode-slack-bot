@@ -1,4 +1,3 @@
-import { Log } from '../../lib/utils/helpers';
 import { getInstallation } from '.';
 
 export const getToken = async (
@@ -6,19 +5,15 @@ export const getToken = async (
   isEnterpriseInstall: boolean,
   teamId: string
 ) => {
-  try {
-    const installation = await getInstallation({
-      enterpriseId,
-      isEnterpriseInstall,
-      teamId
-    });
+  const installation = await getInstallation({
+    enterpriseId,
+    isEnterpriseInstall,
+    teamId
+  });
 
-    if (!installation.bot) {
-      throw new Error('Error fetching bot user');
-    }
-
-    return installation.bot.token;
-  } catch (e) {
-    Log.error('Error fetching token');
+  if (!installation.bot) {
+    throw new Error('Error fetching bot user');
   }
+
+  return installation.bot.token;
 };

@@ -31,6 +31,11 @@ class PostQuestion {
         }
 
         const channels = await getChannels(token);
+
+        if (!channels) {
+          throw new Error('Error fetching channels');
+        }
+
         const randomQuestion = await getRandomQuestion();
 
         if (!randomQuestion) {

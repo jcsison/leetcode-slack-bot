@@ -25,9 +25,13 @@ export const receiver = new Bolt.ExpressReceiver({
     'groups:read',
     'im:read',
     'incoming-webhook',
+    'links:read',
+    'links:write',
     'mpim:read',
     'reactions:read',
     'reactions:write',
+    'reminders:read',
+    'reminders:write',
     'users:read'
   ],
   signingSecret: process.env.SLACK_SIGNING_SECRET ?? '',

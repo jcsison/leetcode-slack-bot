@@ -16,6 +16,14 @@ export const dbStore = async (key: string, value: unknown) => {
 
 export const dbRead = async <T>(key: string) => {
   const dataSnapshot = await get(ref(db, key));
+  const data: T | undefined = dataSnapshot.val();
+  return data;
+};
+
+// This uses an unsafe type assertion as a workaround for a typing issue with
+// FileInstallationSource.fetchInstallation()
+export const dbUnsafeRead = async <T>(key: string) => {
+  const dataSnapshot = await get(ref(db, key));
   const data: T = dataSnapshot.val();
   return data;
 };

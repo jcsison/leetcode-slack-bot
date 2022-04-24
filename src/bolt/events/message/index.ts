@@ -11,11 +11,8 @@ const message: Middleware<SlackEventMiddlewareArgs<'message'>> = async ({
 }) => {
   try {
     Log.info(message);
-    const token = await getTokenByChannel(message.channel);
 
-    if (!token) {
-      throw new Error('Error fetching token');
-    }
+    const token = await getTokenByChannel(message.channel);
 
     // Handle solutions posted as a reply to a question
     if (message.subtype === 'file_share' && message.thread_ts) {
@@ -24,10 +21,6 @@ const message: Middleware<SlackEventMiddlewareArgs<'message'>> = async ({
         message.channel,
         token
       );
-
-      if (!parentMessage) {
-        throw new Error('Error fetching parent message');
-      }
 
       if (validateLeetCodeUrl(parentMessage.text)) {
         return await solutionPosted(message.channel, message, token);

@@ -15,19 +15,11 @@ const reactionAdded: Middleware<
     if (payload.item.type === 'message') {
       const token = await getTokenByChannel(payload.item.channel);
 
-      if (!token) {
-        throw new Error('Error fetching token');
-      }
-
       const message = await getMessageReply(
         payload.item.ts,
         payload.item.channel,
         token
       );
-
-      if (!message) {
-        throw new Error('Error fetching message');
-      }
 
       // Handle solutions posted as a reply to a question
       if (message.files && message.thread_ts) {
@@ -36,10 +28,6 @@ const reactionAdded: Middleware<
           payload.item.channel,
           token
         );
-
-        if (!parentMessage) {
-          throw new Error('Error fetching parent message');
-        }
 
         if (validateLeetCodeUrl(parentMessage.text)) {
           return await solutionPosted(payload.item.channel, message, token);

@@ -92,7 +92,7 @@ export const solutionPosted = async (
         token
       );
 
-      if (!questionMessage?.ts) {
+      if (!questionMessage.ts) {
         throw new Error('Error fetching question');
       }
 

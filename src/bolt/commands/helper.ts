@@ -67,10 +67,6 @@ export const command = (props: CommandProps) => () =>
             res.payload.team_id
           );
 
-          if (!updateToken) {
-            throw new Error('Error fetching token');
-          }
-
           await bolt.client.chat.update({
             channel: res.command.channel_id,
             text: data.text,
@@ -90,10 +86,6 @@ export const command = (props: CommandProps) => () =>
             !!res.payload.is_enterprise_install,
             res.payload.team_id
           );
-
-          if (!deleteToken) {
-            throw new Error('Error fetching token');
-          }
 
           await bolt.client.chat.delete({
             channel: res.command.channel_id,

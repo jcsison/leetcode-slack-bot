@@ -5,7 +5,13 @@ import {
 } from '@slack/bolt';
 
 import { Log } from '../../lib/utils/helpers';
-import { createPath, dbDelete, DBKey, dbRead, dbStore } from '../../lib/firebase';
+import {
+  createPath,
+  dbDelete,
+  DBKey,
+  dbStore,
+  dbUnsafeRead
+} from '../../lib/firebase';
 
 export class LCFileInstallationStore extends FileInstallationStore {
   storeInstallation = async (installation: Installation) => {
@@ -28,11 +34,11 @@ export class LCFileInstallationStore extends FileInstallationStore {
   fetchInstallation = async (query: InstallationQuery<boolean>) => {
     try {
       if (query.isEnterpriseInstall && query.enterpriseId) {
-        return await dbRead<Installation>(
+        return await dbUnsafeRead<Installation>(
           createPath(DBKey.INSTALLATIONS, query.enterpriseId)
         );
       } else if (query.teamId) {
-        return await dbRead<Installation>(
+        return await dbUnsafeRead<Installation>(
           createPath(DBKey.INSTALLATIONS, query.teamId)
         );
       } else {
@@ -40,7 +46,7 @@ export class LCFileInstallationStore extends FileInstallationStore {
       }
     } catch (error) {
       Log.error(error, 'Error reading installation');
-      return dbRead<Installation>('');
+      return dbUnsafeRead<Installation>('');
     }
   };
   deleteInstallation = async (query: InstallationQuery<boolean>) => {
