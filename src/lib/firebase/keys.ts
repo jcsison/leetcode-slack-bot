@@ -1,3 +1,7 @@
+export enum DBFilterKey {
+  USER_ID_QUESTION_ID = 'userId_questionId'
+}
+
 export enum DBKey {
   INSTALLATIONS = 'installations',
   POST_QUESTION = 'postQuestion',
@@ -11,6 +15,11 @@ export enum DBInstallationKey {
 
 export enum DBTypeKey {
   CHANNELS = 'channels',
+  FILTERS = '_filters',
   MESSAGES = 'messages',
   USERS = 'users'
+}
+
+export enum DBValueKey {
+  CHANNEL_ID = 'channelId'
 }

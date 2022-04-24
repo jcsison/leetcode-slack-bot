@@ -1,4 +1,4 @@
-import topicTags from '../data/topicTags.json';
+import topicTags from '../data/topicTags.json' assert { type: 'json' };
 import { Guard, Log } from '../../../utils/helpers';
 import { LeetCodeTypes } from '../../../utils/types';
 

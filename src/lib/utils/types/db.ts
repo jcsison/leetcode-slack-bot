@@ -6,6 +6,9 @@ export interface SubmittedSolution {
   messageTs: string;
   questionTs: string;
   userId: string;
+  _filters: {
+    userId_questionId: string;
+  };
 }
 
 export interface Question {

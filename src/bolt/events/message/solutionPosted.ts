@@ -6,7 +6,11 @@ import { Log } from '../../../lib/utils/helpers';
 import { addReaction, getMessage } from '../../actions';
 import {
   convertToPathTs,
+  createFilter,
   createPath,
+  dbDelete,
+  DBFilterKey,
+  dbFindByChildKeyValue,
   DBKey,
   dbRead,
   dbStore,
@@ -24,7 +28,37 @@ export const solutionPosted = async (
       throw new Error('Invalid solution');
     }
 
+    const previouslySubmittedSolution = (
+      await dbFindByChildKeyValue<DBTypes.SubmittedSolution>(
+        createPath(
+          DBTypeKey.CHANNELS,
+          channelId,
+          DBKey.SUBMITTED_SOLUTIONS,
+          DBTypeKey.MESSAGES
+        ),
+        createPath(DBTypeKey.FILTERS, DBFilterKey.USER_ID_QUESTION_ID),
+        createFilter(message.user, message.thread_ts)
+      )
+    )?.[1];
+
+    if (previouslySubmittedSolution) {
+      await dbDelete(
+        createPath(
+          DBTypeKey.CHANNELS,
+          channelId,
+          DBKey.SUBMITTED_SOLUTIONS,
+          DBTypeKey.MESSAGES,
+          convertToPathTs(previouslySubmittedSolution.messageTs)
+        )
+      );
+
+      Log.info('Previous solution removed from db');
+    }
+
     const submittedSolution: DBTypes.SubmittedSolution = {
+      _filters: {
+        userId_questionId: createFilter(message.user, message.thread_ts)
+      },
       messageTs: message.ts,
       questionTs: message.thread_ts,
       userId: message.user
@@ -51,8 +85,6 @@ export const solutionPosted = async (
         ),
         submittedSolution
       );
-
-      Log.info('Question posted');
     } else {
       const questionMessage = await getMessage(
         message.thread_ts,
@@ -92,6 +124,15 @@ export const solutionPosted = async (
         question
       );
 
+      await addReaction(
+        'heavy_check_mark',
+        channelId,
+        message.thread_ts,
+        token
+      );
+
+      Log.info('Question added to db');
+
       await dbStore(
         createPath(
           DBTypeKey.CHANNELS,
@@ -102,18 +143,11 @@ export const solutionPosted = async (
         ),
         submittedSolution
       );
-
-      await addReaction(
-        'heavy_check_mark',
-        channelId,
-        message.thread_ts,
-        token
-      );
     }
 
     await addReaction('white_check_mark', channelId, message.ts, token);
 
-    Log.info('Solution posted');
+    Log.info('Solution added to db');
   } catch (error) {
     Log.error(error, 'Error adding reaction');
   }

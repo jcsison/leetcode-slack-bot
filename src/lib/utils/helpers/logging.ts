@@ -1,4 +1,5 @@
 import pino from 'pino';
+import { serializeError } from 'serialize-error';
 
 import { DataError } from '../types';
 import { Guard } from '.';
@@ -14,23 +15,33 @@ export const error = (
 ) => {
   if (Guard.object<DataError>('name', 'message', 'data')(error)) {
     logger.error(
-      JSON.stringify(error),
+      JSON.stringify(serializeError(error)),
       message,
       error.message,
       error.data,
       ...params
     );
   } else if (Guard.object<Error>('name', 'message')(error)) {
-    logger.error(JSON.stringify(error), message, ...params);
+    logger.error(error.message, message, ...params);
+  } else if (Guard.string(error)) {
+    logger.error(error, message, ...params);
   } else {
-    logger.error(JSON.stringify(error), message, ...params);
+    logger.error(JSON.stringify(serializeError(error)), message, ...params);
   }
 };
 
 export const info = (info: unknown, message?: string, ...params: unknown[]) => {
-  if (message) {
-    logger.info(JSON.stringify(info), message, ...params);
+  if (Guard.string(info)) {
+    logger.info(info, message, ...params);
   } else {
-    logger.info(JSON.stringify(info), undefined, ...params);
+    logger.info(JSON.stringify(info), message, ...params);
+  }
+};
+
+export const warn = (warn: unknown, message?: string, ...params: unknown[]) => {
+  if (Guard.string(warn)) {
+    logger.warn(warn, message, ...params);
+  } else {
+    logger.warn(JSON.stringify(warn), message, ...params);
   }
 };

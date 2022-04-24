@@ -1,4 +1,5 @@
 export * from './addReaction';
+export * from './getBotId';
 export * from './getChannels';
 export * from './getInstallation';
 export * from './getInstallationByChannel';

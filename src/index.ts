@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import { App, CodedError, ExpressReceiver } from '@slack/bolt';
+import Bolt from '@slack/bolt';
 import { getDatabase } from 'firebase/database';
 import { initializeApp } from 'firebase/app';
 
@@ -10,7 +10,7 @@ import { launchBolt } from './bolt/launchBolt';
 
 dotenv.config();
 
-export const receiver = new ExpressReceiver({
+export const receiver = new Bolt.ExpressReceiver({
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   installationStore: new LCFileInstallationStore(),
@@ -27,13 +27,14 @@ export const receiver = new ExpressReceiver({
     'incoming-webhook',
     'mpim:read',
     'reactions:read',
-    'reactions:write'
+    'reactions:write',
+    'users:read'
   ],
   signingSecret: process.env.SLACK_SIGNING_SECRET ?? '',
   stateSecret: process.env.SLACK_STATE_SECRET
 });
 
-export const bolt = new App({
+export const bolt = new Bolt.App({
   receiver
 });
 
@@ -57,7 +58,7 @@ const startBolt = async () => {
   launchBolt();
 };
 
-bolt.error((error: CodedError) => new Promise(() => Log.error(error)));
+bolt.error((error: Bolt.CodedError) => new Promise(() => Log.error(error)));
 
 bolt.message('knock knock', async ({ say }) => {
   await say("_Who's there?_");

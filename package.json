@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A bot for Slack that posts LeetCode questions.",
   "main": "src/index.ts",
+  "type": "module",
   "scripts": {
     "start": "node --loader ts-node/esm --experimental-specifier-resolution=node --no-warnings src/index.ts | pino-pretty",
     "build:watch": "tsc -w -p ."
@@ -23,6 +24,7 @@
     "node-schedule": "^2.1.0",
     "pino": "^7.10.0",
     "pino-pretty": "^7.6.1",
+    "serialize-error": "^10.0.0",
     "ts-node": "^10.7.0"
   },
   "devDependencies": {
