@@ -8,6 +8,7 @@ import {
   set
 } from 'firebase/database';
 
+import { ObjectGroup } from '../utils/types';
 import { db } from '../..';
 
 export const dbStore = async (key: string, value: unknown) => {
@@ -40,6 +41,6 @@ export const dbFindByChildKeyValue = async <T>(
   const dataSnapshot = await get(
     query(ref(db, key), orderByChild(childKey), equalTo(value))
   );
-  const data = Object.entries<T>(dataSnapshot.val())[0];
-  return data;
+  const data: ObjectGroup<T> | undefined = dataSnapshot.val();
+  return data ? Object.entries<T>(data)[0] : undefined;
 };

@@ -9,3 +9,4 @@ export * from './getPreviousQuestionMessage';
 export * from './getToken';
 export * from './getTokenByChannel';
 export * from './postError';
+export * from './removeReaction';

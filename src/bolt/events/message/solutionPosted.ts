@@ -3,7 +3,7 @@ import { Message } from '@slack/web-api/dist/response/ChatPostMessageResponse';
 
 import { DBTypes } from '../../../lib/utils/types';
 import { Log } from '../../../lib/utils/helpers';
-import { addReaction, getMessage } from '../../actions';
+import { addReaction, getMessage, removeReaction } from '../../actions';
 import {
   convertToPathTs,
   createFilter,
@@ -51,6 +51,8 @@ export const solutionPosted = async (
           convertToPathTs(previouslySubmittedSolution.messageTs)
         )
       );
+
+      await removeReaction('white_check_mark', channelId, message.ts, token);
 
       Log.info('Previous solution removed from db');
     }
