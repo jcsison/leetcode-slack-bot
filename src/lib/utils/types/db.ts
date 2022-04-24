@@ -1,6 +1,4 @@
-import { ObjectGroup } from './common';
-
-export interface PostChannel {
+export interface PostQuestion {
   token: string;
 }
 
@@ -13,6 +11,5 @@ export interface SubmittedSolution {
 export interface Question {
   handle: string;
   messageTs: string;
-  submittedSolutions: ObjectGroup<ObjectGroup<SubmittedSolution>>;
   url: string;
 }

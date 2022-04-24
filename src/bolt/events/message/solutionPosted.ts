@@ -1,19 +1,18 @@
 import { FileShareMessageEvent } from '@slack/bolt';
+import { Message } from '@slack/web-api/dist/response/ChatPostMessageResponse';
 
 import { DBTypes } from '../../../lib/utils/types';
-import { createObjectGroup, Log } from '../../../lib/utils/helpers';
+import { Log } from '../../../lib/utils/helpers';
 import { addReaction, getMessage } from '../../actions';
 import {
   convertToPathTs,
   createPath,
   DBKey,
-  DBQuestionKey,
   dbRead,
   dbStore,
   DBTypeKey
 } from '../../../lib/firebase';
 import { parseHandleFromMessage, parseUrlFromMessage } from '../../utils';
-import { Message } from '@slack/web-api/dist/response/ChatPostMessageResponse';
 
 export const solutionPosted = async (
   channelId: string,
@@ -33,9 +32,9 @@ export const solutionPosted = async (
 
     const questionDB = await dbRead<DBTypes.Question>(
       createPath(
-        DBKey.QUESTIONS,
         DBTypeKey.CHANNELS,
         channelId,
+        DBKey.QUESTIONS,
         DBTypeKey.MESSAGES,
         convertToPathTs(message.thread_ts)
       )
@@ -44,17 +43,16 @@ export const solutionPosted = async (
     if (questionDB) {
       await dbStore(
         createPath(
-          DBKey.QUESTIONS,
           DBTypeKey.CHANNELS,
           channelId,
+          DBKey.SUBMITTED_SOLUTIONS,
           DBTypeKey.MESSAGES,
-          convertToPathTs(message.thread_ts),
-          DBQuestionKey.SUBMITTED_SOLUTIONS,
-          DBTypeKey.USERS,
-          message.user
+          convertToPathTs(message.ts)
         ),
         submittedSolution
       );
+
+      Log.info('Question posted');
     } else {
       const questionMessage = await getMessage(
         message.thread_ts,
@@ -80,22 +78,29 @@ export const solutionPosted = async (
       const question: DBTypes.Question = {
         handle: questionHandle,
         messageTs: questionMessage.ts,
-        submittedSolutions: createObjectGroup(
-          'users',
-          createObjectGroup(message.user, submittedSolution)
-        ),
         url: questionUrl
       };
 
       await dbStore(
         createPath(
-          DBKey.QUESTIONS,
           DBTypeKey.CHANNELS,
           channelId,
+          DBKey.QUESTIONS,
           DBTypeKey.MESSAGES,
           convertToPathTs(message.thread_ts)
         ),
         question
+      );
+
+      await dbStore(
+        createPath(
+          DBTypeKey.CHANNELS,
+          channelId,
+          DBKey.SUBMITTED_SOLUTIONS,
+          DBTypeKey.MESSAGES,
+          convertToPathTs(message.ts)
+        ),
+        submittedSolution
       );
 
       await addReaction(

@@ -1,15 +1,12 @@
 export enum DBKey {
   INSTALLATIONS = 'installations',
-  POST_CHANNELS = 'postChannels',
-  QUESTIONS = 'questions'
+  POST_QUESTION = 'postQuestion',
+  QUESTIONS = 'questions',
+  SUBMITTED_SOLUTIONS = 'submittedSolutions'
 }
 
 export enum DBInstallationKey {
   INCOMING_WEBHOOK = 'incomingWebhook'
-}
-
-export enum DBQuestionKey {
-  SUBMITTED_SOLUTIONS = 'submittedSolutions'
 }
 
 export enum DBTypeKey {

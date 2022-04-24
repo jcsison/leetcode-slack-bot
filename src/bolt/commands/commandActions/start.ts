@@ -25,20 +25,20 @@ export const start = async (command: SlashCommand) => {
 
     const channelId = command.channel_id;
 
-    const postChannelToken = await dbRead<DBTypes.PostChannel>(
-      createPath(DBKey.POST_CHANNELS, DBTypeKey.CHANNELS, channelId)
+    const postQuestionToken = await dbRead<DBTypes.PostQuestion>(
+      createPath(DBTypeKey.CHANNELS, channelId, DBKey.POST_QUESTION)
     );
 
-    if (!!postChannelToken) {
+    if (!!postQuestionToken) {
       return 'LeetCode Bot is already posting daily questions in this channel.';
     }
 
-    const postChannel: DBTypes.PostChannel = {
+    const postChannel: DBTypes.PostQuestion = {
       token
     };
 
     await dbStore(
-      createPath(DBKey.POST_CHANNELS, DBTypeKey.CHANNELS, channelId),
+      createPath(DBTypeKey.CHANNELS, channelId, DBKey.POST_QUESTION),
       postChannel
     );
 

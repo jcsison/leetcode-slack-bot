@@ -11,22 +11,22 @@ class PostQuestion {
   rule: RecurrenceSpecObjLit = { hour: 1, minute: 0, second: 0 }; // 01:00 UTC / 18:00 PDT
   fn = async () => {
     try {
-      const postChannelsData = await dbRead<ObjectGroup<DBTypes.PostChannel>>(
-        DBKey.POST_CHANNELS
+      const postQuestionData = await dbRead<ObjectGroup<DBTypes.PostQuestion>>(
+        DBKey.POST_QUESTION
       );
 
-      if (!postChannelsData) {
+      if (!postQuestionData) {
         throw new Error('Error fetching channels');
       }
 
-      const postChannels = Object.entries(postChannelsData);
+      const postQuestionChannels = Object.entries(postQuestionData);
 
-      postChannels.forEach(async postChannelEntry => {
-        const postChannel = postChannelEntry[1];
+      postQuestionChannels.forEach(async postQuestionChannel => {
+        const postChannel = postQuestionChannel[1];
         const token = postChannel.token;
 
         if (!token) {
-          Log.error(`Error fetching token for ${postChannelEntry[0]}`);
+          Log.error(`Error fetching token for ${postQuestionChannel[0]}`);
           return;
         }
 
