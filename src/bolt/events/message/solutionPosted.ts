@@ -42,19 +42,24 @@ export const solutionPosted = async (
     )?.[1];
 
     if (previouslySubmittedSolution) {
-      await dbDelete(
-        createPath(
-          DBTypeKey.CHANNELS,
-          channelId,
-          DBKey.SUBMITTED_SOLUTIONS,
-          DBTypeKey.MESSAGES,
-          convertToPathTs(previouslySubmittedSolution.messageTs)
-        )
-      );
+      if (previouslySubmittedSolution.messageTs === message.ts) {
+        Log.info('Solution already added to db');
+        return;
+      } else {
+        await dbDelete(
+          createPath(
+            DBTypeKey.CHANNELS,
+            channelId,
+            DBKey.SUBMITTED_SOLUTIONS,
+            DBTypeKey.MESSAGES,
+            convertToPathTs(previouslySubmittedSolution.messageTs)
+          )
+        );
 
-      await removeReaction('white_check_mark', channelId, message.ts, token);
+        await removeReaction('white_check_mark', channelId, message.ts, token);
 
-      Log.info('Previous solution removed from db');
+        Log.info('Previous solution removed from db');
+      }
     }
 
     const submittedSolution: DBTypes.SubmittedSolution = {
