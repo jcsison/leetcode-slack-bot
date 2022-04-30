@@ -1,18 +1,22 @@
-import { RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
+import { Range, RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
 
 import { Log } from '../../lib/utils/helpers';
-import { DBTypes, ObjectGroup } from '../../lib/utils/types';
+import { DBTypes, Enums, ObjectGroup } from '../../lib/utils/types';
 import { bolt } from '../..';
-import { DBKey, dbRead } from '../../lib/firebase';
-import { getChannels } from '../actions/getChannels';
+import { createPath, DBKey, dbRead, DBTypeKey } from '../../lib/firebase';
 import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions';
 
 class PostQuestion {
-  rule: RecurrenceSpecObjLit = { hour: 1, minute: 0, second: 0 }; // 01:00 UTC / 18:00 PDT
+  rule: RecurrenceSpecObjLit = {
+    dayOfWeek: [new Range(2, 6)],
+    hour: 1,
+    minute: 0,
+    second: 0
+  }; // 01:00 UTC Tue-Sat / 18:00 PDT Mon-Fri
   fn = async () => {
     try {
       const postQuestionData = await dbRead<ObjectGroup<DBTypes.PostQuestion>>(
-        DBKey.POST_QUESTION
+        createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS)
       );
 
       if (!postQuestionData) {
@@ -22,40 +26,40 @@ class PostQuestion {
       const postQuestionChannels = Object.entries(postQuestionData);
 
       postQuestionChannels.forEach(async postQuestionChannel => {
-        const postChannel = postQuestionChannel[1];
-        const token = postChannel.token;
+        try {
+          const postChannel = postQuestionChannel[1];
+          const channelId = postQuestionChannel[0];
+          const token = postChannel?.token;
 
-        if (!token) {
-          Log.error(`Error fetching token for ${postQuestionChannel[0]}`);
-          return;
-        }
+          if (!token) {
+            Log.error(`Error fetching token for ${postQuestionChannel[0]}`);
+            return;
+          }
 
-        const channels = await getChannels(token);
+          const randomQuestion = await getRandomQuestion(channelId, {
+            difficulty: Enums.QuestionDifficulty.EASY,
+            listId: 'wpwgkgt'
+          });
 
-        if (!channels) {
-          throw new Error('Error fetching channels');
-        }
+          if (!randomQuestion) {
+            throw new Error('Error fetching question');
+          }
 
-        const randomQuestion = await getRandomQuestion();
-
-        if (!randomQuestion) {
-          throw new Error('Error fetching question');
-        }
-
-        channels?.forEach(async channel => {
-          if (channel.id) {
+          if (channelId) {
             await bolt.client.chat.postMessage({
-              channel: channel.id,
+              channel: channelId,
               text: randomQuestion.url,
               token
             });
 
             Log.info(
-              { channelName: channel.name, message: randomQuestion.url },
+              { channelId, message: randomQuestion.url },
               'Posted question'
             );
           }
-        });
+        } catch (error) {
+          Log.error(error, 'Error posting question');
+        }
       });
     } catch (error) {
       Log.error(error, 'Error posting question');

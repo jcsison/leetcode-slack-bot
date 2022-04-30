@@ -1,6 +1,14 @@
+import { Enums } from '.';
+
 export interface CommandInfo {
   command: string;
   description: string;
+}
+
+export interface QuestionFilter {
+  difficulty?: Enums.QuestionDifficulty;
+  listId?: string;
+  tags?: string[];
 }
 
 export interface Question {

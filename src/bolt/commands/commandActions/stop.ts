@@ -13,7 +13,7 @@ export const stop = async (command: SlashCommand) => {
   const channelId = command.channel_id;
 
   const willPost = await dbRead<DBTypes.PostQuestion>(
-    createPath(DBTypeKey.CHANNELS, channelId, DBKey.POST_QUESTION)
+    createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS, channelId)
   );
 
   if (!willPost) {
@@ -21,7 +21,7 @@ export const stop = async (command: SlashCommand) => {
   }
 
   await dbDelete(
-    createPath(DBTypeKey.CHANNELS, channelId, DBKey.POST_QUESTION)
+    createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS, channelId)
   );
 
   return 'LeetCode Bot will now stop posting daily questions in this channel.';

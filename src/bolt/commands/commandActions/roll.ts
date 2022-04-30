@@ -1,6 +1,6 @@
 import { SlashCommand } from '@slack/bolt';
 
-import { LeetCodeTypes } from '../../../lib/utils/types';
+import { Enums, LeetCodeTypes } from '../../../lib/utils/types';
 import { getCompanyTags } from '../../../lib/dataSource/leetcode/actions/getCompanyTags';
 import {
   getRandomQuestion,
@@ -22,14 +22,14 @@ const validateFilter = (
 };
 
 export const roll = async (command: SlashCommand) => {
-  const filters = command.text
+  const tagFilters = command.text
     .trim()
     .split(/\s+/)
     .filter(filter => !!filter);
   const companyTags = await getCompanyTags();
   const topicTags = getTopicTags();
 
-  for (const filter of filters) {
+  for (const filter of tagFilters) {
     if (!validateFilter(filter, [topicTags, companyTags])) {
       const token = await getToken(
         command.enterprise_id,
@@ -46,7 +46,10 @@ export const roll = async (command: SlashCommand) => {
     }
   }
 
-  const randomQuestion = await getRandomQuestion(filters);
+  const randomQuestion = await getRandomQuestion(command.channel_id, {
+    difficulty: Enums.QuestionDifficulty.EASY,
+    tags: tagFilters
+  });
 
   return randomQuestion.url;
 };

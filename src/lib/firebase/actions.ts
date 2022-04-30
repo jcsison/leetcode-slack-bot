@@ -17,7 +17,7 @@ export const dbStore = async (key: string, value: unknown) => {
 
 export const dbRead = async <T>(key: string) => {
   const dataSnapshot = await get(ref(db, key));
-  const data: T | undefined = dataSnapshot.val();
+  const data: Partial<T> | undefined = dataSnapshot.val();
   return data;
 };
 

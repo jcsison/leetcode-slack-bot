@@ -20,7 +20,7 @@ export const start = async (command: SlashCommand) => {
   const channelId = command.channel_id;
 
   const postQuestionToken = await dbRead<DBTypes.PostQuestion>(
-    createPath(DBTypeKey.CHANNELS, channelId, DBKey.POST_QUESTION)
+    createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS, channelId)
   );
 
   if (!!postQuestionToken) {
@@ -32,7 +32,7 @@ export const start = async (command: SlashCommand) => {
   };
 
   await dbStore(
-    createPath(DBTypeKey.CHANNELS, channelId, DBKey.POST_QUESTION),
+    createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS, channelId),
     postChannel
   );
 
