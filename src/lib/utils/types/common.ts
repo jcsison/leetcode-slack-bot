@@ -8,7 +8,3 @@ export class DataError extends Error {
 }
 
 export type Maybe<T> = T | undefined | null;
-
-export interface ObjectGroup<T> {
-  [x: string]: T;
-}

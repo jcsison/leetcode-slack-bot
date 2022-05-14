@@ -1,8 +1,3 @@
-import { ObjectGroup } from '../types';
-
-export const createObjectGroup = <T>(
-  key: string,
-  value: T
-): ObjectGroup<T> => ({
+export const createRecord = <T>(key: string, value: T): Record<string, T> => ({
   [key]: value
 });

@@ -1,7 +1,7 @@
 import { Range, RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
 
 import { Log } from '../../lib/utils/helpers';
-import { DBTypes, Enums, ObjectGroup } from '../../lib/utils/types';
+import { DBTypes, Enums } from '../../lib/utils/types';
 import { bolt } from '../..';
 import { createPath, DBKey, dbRead, DBTypeKey } from '../../lib/firebase';
 import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions';
@@ -15,9 +15,9 @@ class PostQuestion {
   }; // 01:00 UTC Tue-Sat / 18:00 PDT Mon-Fri
   fn = async () => {
     try {
-      const postQuestionData = await dbRead<ObjectGroup<DBTypes.PostQuestion>>(
-        createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS)
-      );
+      const postQuestionData = await dbRead<
+        Record<string, DBTypes.PostQuestion>
+      >(createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS));
 
       if (!postQuestionData) {
         throw new Error('Error fetching channels');

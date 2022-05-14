@@ -1,7 +1,6 @@
 import * as dotenv from 'dotenv';
 import Bolt from '@slack/bolt';
-import { getDatabase } from 'firebase/database';
-import { initializeApp } from 'firebase/app';
+import admin from 'firebase-admin';
 
 import { LCFileInstallationStore } from './bolt/utils/LCFileInstallationStore';
 import { Log } from './lib/utils/helpers';
@@ -42,17 +41,20 @@ export const bolt = new Bolt.App({
   receiver
 });
 
-export const firebase = initializeApp({
-  apiKey: process.env.FIREBASE_API_KEY,
-  appId: process.env.FIREBASE_APP_ID,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+export const firebase = admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY
+      ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
+      : undefined,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL
+  }),
   databaseURL: process.env.FIREBASE_DATABASE_URL,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   projectId: process.env.FIREBASE_PROCESS_ID,
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET
 });
 
-export const db = getDatabase(firebase);
+export const db = admin.database();
 
 const startBolt = async () => {
   const port = process.env.PORT ?? 3000;

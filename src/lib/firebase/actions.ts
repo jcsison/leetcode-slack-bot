@@ -1,22 +1,11 @@
-import {
-  equalTo,
-  get,
-  orderByChild,
-  query,
-  ref,
-  remove,
-  set
-} from 'firebase/database';
-
-import { ObjectGroup } from '../utils/types';
 import { db } from '../..';
 
-export const dbStore = async (key: string, value: unknown) => {
-  await set(ref(db, key), value);
+export const dbStore = async <T>(key: string, value: T) => {
+  await db.ref(key).set(value);
 };
 
 export const dbRead = async <T>(key: string) => {
-  const dataSnapshot = await get(ref(db, key));
+  const dataSnapshot = await db.ref(key).get();
   const data: Partial<T> | undefined = dataSnapshot.val();
   return data;
 };
@@ -24,13 +13,13 @@ export const dbRead = async <T>(key: string) => {
 // This uses an unsafe type assertion as a workaround for a typing issue with
 // FileInstallationSource.fetchInstallation()
 export const dbUnsafeRead = async <T>(key: string) => {
-  const dataSnapshot = await get(ref(db, key));
+  const dataSnapshot = await db.ref(key).get();
   const data: T = dataSnapshot.val();
   return data;
 };
 
 export const dbDelete = async (key: string) => {
-  await remove(ref(db, key));
+  await db.ref(key).remove();
 };
 
 export const dbFindByChildKeyValue = async <T>(
@@ -38,9 +27,11 @@ export const dbFindByChildKeyValue = async <T>(
   childKey: string,
   value: string
 ) => {
-  const dataSnapshot = await get(
-    query(ref(db, key), orderByChild(childKey), equalTo(value))
-  );
-  const data: ObjectGroup<T> | undefined = dataSnapshot.val();
+  const dataSnapshot = await db
+    .ref(key)
+    .orderByChild(childKey)
+    .equalTo(value)
+    .get();
+  const data: Record<string, T> | undefined = dataSnapshot.val();
   return data ? Object.entries<T>(data)[0] : undefined;
 };

@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm --experimental-specifier-resolution=node --no-warnings src/index.ts | pino-pretty",
+    "start": "node --experimental-specifier-resolution=node --loader ts-node/esm --max_old_space_size=460 --no-warnings --optimize_for_size src/index.ts | pino-pretty",
     "build:watch": "tsc -w -p ."
   },
   "author": "",
@@ -17,8 +17,8 @@
     "axios": "^0.26.1",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "firebase": "^9.6.11",
-    "form-data": "^4.0.0",
+    "firebase-admin": "^10.2.0",
+    "google-auth-library": "^8.0.2",
     "graphql-request": "^4.2.0",
     "lodash": "^4.17.21",
     "node-schedule": "^2.1.0",
