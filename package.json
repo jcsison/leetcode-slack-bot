@@ -1,14 +1,14 @@
 {
   "name": "leetcode-slack-bot",
   "version": "1.0.0",
-  "description": "A bot for Slack that posts LeetCode questions.",
+  "description": "A Slack bot that posts LeetCode questions!",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
     "start": "node --experimental-specifier-resolution=node --loader ts-node/esm --max_old_space_size=460 --no-warnings --optimize_for_size src/index.ts | pino-pretty",
     "build:watch": "tsc -w -p ."
   },
-  "author": "",
+  "author": "jcsison",
   "license": "ISC",
   "dependencies": {
     "@slack/bolt": "^3.11.0",

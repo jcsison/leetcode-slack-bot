@@ -8,7 +8,8 @@ import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions';
 
 class PostQuestion {
   rule: RecurrenceSpecObjLit = {
-    dayOfWeek: [new Range(2, 6)],
+    // dayOfWeek: [new Range(2, 6)],
+    dayOfWeek: [2, 4],
     hour: 1,
     minute: 0,
     second: 0
