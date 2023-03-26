@@ -2,8 +2,8 @@ import * as dotenv from 'dotenv';
 import Bolt from '@slack/bolt';
 import admin from 'firebase-admin';
 
+import { Guard, Log, parseJSON } from './lib/utils/helpers/index.js';
 import { LCFileInstallationStore } from './bolt/utils/LCFileInstallationStore.js';
-import { Log } from './lib/utils/helpers/index.js';
 import { launchApi } from './api/launchApi.js';
 import { launchBolt } from './bolt/launchBolt.js';
 
@@ -45,7 +45,7 @@ export const firebase = admin.initializeApp({
   credential: admin.credential.cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
     privateKey: process.env.FIREBASE_PRIVATE_KEY
-      ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
+      ? parseJSON(process.env.FIREBASE_PRIVATE_KEY, Guard.string)
       : undefined,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL
   }),

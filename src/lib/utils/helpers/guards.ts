@@ -1,22 +1,52 @@
-export type Guard<T> = (o: unknown) => o is T;
+import { GuardType } from '../types/common.js'
 
-export const array =
-  <T>(guard?: Guard<T>): Guard<T[]> =>
+type FunctionType = () => unknown | ((...args: unknown[]) => unknown)
+
+const array =
+  <T>(guard?: GuardType<T>): GuardType<T[]> =>
   (o: unknown): o is T[] =>
     !!guard ? Array.isArray(o) && o.every(guard) : Array.isArray(o);
 
-export const filter = <T>(o: unknown[], guard: Guard<T>) => o.filter(guard);
+const boolean: GuardType<boolean> = (o: unknown): o is boolean => typeof o === 'boolean';
 
-export const object =
-  <T extends object>(...properties: Array<keyof T>): Guard<T> =>
+const filter = <T>(o: unknown[], guard: GuardType<T>) => o.filter(guard);
+
+const fx: GuardType<FunctionType> = (o: unknown): o is FunctionType =>
+  typeof o === 'function';
+
+const number: GuardType<number> = (o: unknown): o is number =>
+  typeof o === 'number';
+
+const object =
+  <T extends object>(...properties: Array<keyof T>): GuardType<T> =>
   (o: unknown): o is T =>
-    !!properties?.length
-      ? typeof o === 'object' &&
-        properties.every(property => property in (o as object))
-      : typeof o === 'object';
+    !!o &&
+    typeof o === 'object' &&
+    !Array.isArray(o) &&
+    (!!properties?.length ? properties.every(property => property in o) : true);
 
-export const string: Guard<string> = (o: unknown): o is string =>
+const promise =
+  <T>(): GuardType<Promise<T>> =>
+  (o: unknown): o is Promise<T> =>
+    object('catch', 'finally', 'then')(o) &&
+    fx(o.catch) &&
+    fx(o.finally) &&
+    fx(o.then);
+
+const string: GuardType<string> = (o: unknown): o is string =>
   typeof o === 'string';
 
-export const validate = <T>(o: unknown, guard: Guard<T>) =>
+const validate = <T>(o: unknown, guard: GuardType<T>) =>
   guard(o) ? o : undefined;
+
+export const Guard = {
+  array,
+  boolean,
+  filter,
+  fx,
+  number,
+  object,
+  promise,
+  string,
+  validate
+};

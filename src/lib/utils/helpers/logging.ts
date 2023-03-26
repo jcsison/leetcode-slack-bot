@@ -8,7 +8,7 @@ const logger = pino({
   base: undefined
 });
 
-export const error = (
+const error = (
   error: unknown,
   message?: string,
   ...params: unknown[]
@@ -30,7 +30,7 @@ export const error = (
   }
 };
 
-export const info = (info: unknown, message?: string, ...params: unknown[]) => {
+const info = (info: unknown, message?: string, ...params: unknown[]) => {
   if (Guard.string(info)) {
     logger.info(info, message, ...params);
   } else {
@@ -38,10 +38,12 @@ export const info = (info: unknown, message?: string, ...params: unknown[]) => {
   }
 };
 
-export const warn = (warn: unknown, message?: string, ...params: unknown[]) => {
+const warn = (warn: unknown, message?: string, ...params: unknown[]) => {
   if (Guard.string(warn)) {
     logger.warn(warn, message, ...params);
   } else {
     logger.warn(JSON.stringify(warn), message, ...params);
   }
 };
+
+export const Log = { error, info, warn }

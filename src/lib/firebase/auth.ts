@@ -1,12 +1,12 @@
 import { JWT } from 'google-auth-library';
 
-import { Log } from '../utils/helpers/index.js';
+import { Guard, Log, parseJSON } from '../utils/helpers/index.js';
 
 export const generateFirebaseAccessToken = async () => {
   try {
     const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
     const privateKey = process.env.FIREBASE_PRIVATE_KEY
-      ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
+      ? parseJSON(process.env.FIREBASE_PRIVATE_KEY, Guard.string)
       : undefined;
 
     const scopes = [

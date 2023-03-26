@@ -7,4 +7,6 @@ export class DataError extends Error {
   }
 }
 
+export type GuardType<T> = (o: unknown) => o is T;
+
 export type Maybe<T> = T | undefined | null;

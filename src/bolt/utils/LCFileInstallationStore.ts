@@ -4,7 +4,7 @@ import {
   InstallationQuery
 } from '@slack/bolt';
 
-import { Log } from '../../lib/utils/helpers/index.js';
+import { Guard, Log, parseJSON } from '../../lib/utils/helpers/index.js';
 import {
   createPath,
   dbDelete,
@@ -19,12 +19,12 @@ export class LCFileInstallationStore extends FileInstallationStore {
       if (installation.isEnterpriseInstall && installation.enterprise?.id) {
         await dbStore(
           createPath(DBKey.INSTALLATIONS, installation.enterprise.id),
-          JSON.parse(JSON.stringify(installation))
+          parseJSON(JSON.stringify(installation), Guard.string)
         );
       } else if (installation.team?.id) {
         await dbStore(
           createPath(DBKey.INSTALLATIONS, installation.team.id),
-          JSON.parse(JSON.stringify(installation))
+          parseJSON(JSON.stringify(installation), Guard.string)
         );
       }
     } catch (error) {

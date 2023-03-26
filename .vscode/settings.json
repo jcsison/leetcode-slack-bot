@@ -10,6 +10,7 @@
   "prettier.quoteProps": "consistent",
   "prettier.singleQuote": true,
   "prettier.trailingComma": "none",
+  "typescript.preferences.importModuleSpecifierEnding": "js",
   "typescript.preferences.quoteStyle": "single",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
