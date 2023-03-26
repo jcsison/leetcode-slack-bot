@@ -1,6 +1,6 @@
 import topicTags from '../data/topicTags.json' assert { type: 'json' };
-import { Guard } from '../../../utils/helpers';
-import { LeetCodeTypes } from '../../../utils/types';
+import { Guard } from '../../../utils/helpers/index.js';
+import { LeetCodeTypes } from '../../../utils/types/index.js';
 
 export const getTopicTags = () => {
   const topicTagsData = Guard.validate(

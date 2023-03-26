@@ -1,6 +1,6 @@
-import { DBTypes } from '../../lib/utils/types';
-import { Guard } from '../../lib/utils/helpers';
-import { createPath, DBKey, dbRead, DBTypeKey } from '../../lib/firebase';
+import { DBTypes } from '../../lib/utils/types/index.js';
+import { Guard } from '../../lib/utils/helpers/index.js';
+import { createPath, DBKey, dbRead, DBTypeKey } from '../../lib/firebase/index.js';
 
 export const getSolvedQuestionSlugs = async (channelId: string) => {
   const solvedQuestions = await dbRead<Record<string, DBTypes.Question>>(

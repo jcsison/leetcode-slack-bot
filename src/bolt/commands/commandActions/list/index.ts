@@ -1,8 +1,8 @@
 import { SlashCommand } from '@slack/bolt';
 
-import { LeetCodeTypes } from '../../../../lib/utils/types';
-import { companyTagsText } from './companyTagsText';
-import { topicTagsText } from './topicTagsText';
+import { LeetCodeTypes } from '../../../../lib/utils/types/index.js';
+import { companyTagsText } from './companyTagsText.js';
+import { topicTagsText } from './topicTagsText.js';
 
 enum ListCommands {
   COMPANIES = 'companies',

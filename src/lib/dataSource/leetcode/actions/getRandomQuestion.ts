@@ -1,7 +1,7 @@
-import { Constants, LeetCodeTypes, Maybe } from '../../../utils/types';
-import { Requests } from '../requests';
-import { getSolvedQuestionSlugs } from '../../../../bolt/actions';
-import { uri } from '../graphql/config';
+import { Constants, LeetCodeTypes, Maybe } from '../../../utils/types/index.js';
+import { Requests } from '../requests/index.js';
+import { getSolvedQuestionSlugs } from '../../../../bolt/actions/index.js';
+import { uri } from '../graphql/config.js';
 
 export const getRandomQuestion = async (
   channelId: string,

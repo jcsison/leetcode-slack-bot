@@ -1,4 +1,4 @@
-import { companyTags } from './companyTags';
-import { randomQuestion } from './randomQuestion';
+import { companyTags } from './companyTags.js';
+import { randomQuestion } from './randomQuestion.js';
 
 export const Queries = { companyTags, randomQuestion };

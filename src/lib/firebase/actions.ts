@@ -1,4 +1,4 @@
-import { db } from '../..';
+import { db } from '../../index.js';
 
 export const dbStore = async <T>(key: string, value: T) => {
   await db.ref(key).set(value);

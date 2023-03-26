@@ -1,10 +1,10 @@
-import { Range, RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
+import { RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
 
-import { Log } from '../../lib/utils/helpers';
-import { DBTypes, Enums } from '../../lib/utils/types';
-import { bolt } from '../..';
-import { createPath, DBKey, dbRead, DBTypeKey } from '../../lib/firebase';
-import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions';
+import { Log } from '../../lib/utils/helpers/index.js';
+import { DBTypes, Enums } from '../../lib/utils/types/index.js';
+import { bolt } from '../../index.js';
+import { createPath, DBKey, dbRead, DBTypeKey } from '../../lib/firebase/index.js';
+import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions/index.js';
 
 class PostQuestion {
   rule: RecurrenceSpecObjLit = {

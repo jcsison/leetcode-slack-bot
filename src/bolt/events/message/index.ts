@@ -1,10 +1,10 @@
 import { Middleware, SlackEventMiddlewareArgs } from '@slack/bolt';
 
-import { Log } from '../../../lib/utils/helpers';
-import { bolt } from '../../..';
-import { getMessage, getTokenByChannel } from '../../actions';
-import { solutionPosted } from './solutionPosted';
-import { validateLeetCodeUrl } from '../../../lib/dataSource/leetcode';
+import { Log } from '../../../lib/utils/helpers/index.js';
+import { bolt } from '../../../index.js';
+import { getMessage, getTokenByChannel } from '../../actions/index.js';
+import { solutionPosted } from './solutionPosted.js';
+import { validateLeetCodeUrl } from '../../../lib/dataSource/leetcode/index.js';
 
 const message: Middleware<SlackEventMiddlewareArgs<'message'>> = async ({
   message

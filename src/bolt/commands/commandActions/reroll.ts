@@ -1,8 +1,8 @@
 import { SlashCommand } from '@slack/bolt';
 
-import { TimeStampedMessageData } from '../helper';
-import { getPreviousQuestionMessage, getToken } from '../../actions';
-import { roll } from './roll';
+import { TimeStampedMessageData } from '../helper.js';
+import { getPreviousQuestionMessage, getToken } from '../../actions/index.js';
+import { roll } from './roll.js';
 
 export const reroll = async (command: SlashCommand) => {
   const token = await getToken(

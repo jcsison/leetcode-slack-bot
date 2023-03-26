@@ -1,7 +1,7 @@
 import { GraphQLClient, RequestDocument, Variables } from 'graphql-request';
 
-import { GraphQLData } from './utils/types';
-import { uri } from './config';
+import { GraphQLData } from './utils/types.js';
+import { uri } from './config.js';
 
 const client = new GraphQLClient(uri.base + '/graphql');
 

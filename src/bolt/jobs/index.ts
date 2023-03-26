@@ -1,4 +1,4 @@
-import { intervalPing } from './intervalPing';
-import { postQuestion } from './postQuestion';
+import { intervalPing } from './intervalPing.js';
+import { postQuestion } from './postQuestion.js';
 
 export const jobs = [intervalPing, postQuestion];

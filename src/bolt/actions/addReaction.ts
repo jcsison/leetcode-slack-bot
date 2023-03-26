@@ -1,6 +1,6 @@
-import { Log } from '../../lib/utils/helpers';
-import { bolt } from '../..';
-import { getBotId } from '.';
+import { Log } from '../../lib/utils/helpers/index.js';
+import { bolt } from '../../index.js';
+import { getBotId } from './index.js';
 
 export const addReaction = async (
   reactionName: string,

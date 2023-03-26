@@ -1,9 +1,9 @@
 import { FileShareMessageEvent } from '@slack/bolt';
 import { Message } from '@slack/web-api/dist/response/ChatPostMessageResponse';
 
-import { DBTypes } from '../../../lib/utils/types';
-import { Log } from '../../../lib/utils/helpers';
-import { addReaction, getMessage, removeReaction } from '../../actions';
+import { DBTypes } from '../../../lib/utils/types/index.js';
+import { Log } from '../../../lib/utils/helpers/index.js';
+import { addReaction, getMessage, removeReaction } from '../../actions/index.js';
 import {
   convertToPathTs,
   createFilter,
@@ -15,8 +15,8 @@ import {
   dbRead,
   dbStore,
   DBTypeKey
-} from '../../../lib/firebase';
-import { parseHandleFromMessage, parseUrlFromMessage } from '../../utils';
+} from '../../../lib/firebase/index.js';
+import { parseHandleFromMessage, parseUrlFromMessage } from '../../utils/index.js';
 
 export const solutionPosted = async (
   channelId: string,

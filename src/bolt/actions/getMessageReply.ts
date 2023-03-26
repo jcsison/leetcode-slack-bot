@@ -1,4 +1,4 @@
-import { bolt } from '../..';
+import { bolt } from '../../index.js';
 
 export const getMessageReply = async (
   messageTs: string,

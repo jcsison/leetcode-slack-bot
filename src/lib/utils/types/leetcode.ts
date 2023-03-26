@@ -1,4 +1,4 @@
-import { Enums } from '.';
+import { Enums } from './index.js';
 
 export interface CommandInfo {
   command: string;

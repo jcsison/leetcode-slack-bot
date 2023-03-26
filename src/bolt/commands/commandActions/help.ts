@@ -1,4 +1,4 @@
-import { LeetCodeTypes } from '../../../lib/utils/types';
+import { LeetCodeTypes } from '../../../lib/utils/types/index.js';
 
 const commands: LeetCodeTypes.CommandInfo[] = [
   {

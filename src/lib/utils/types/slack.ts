@@ -1,4 +1,4 @@
-import { Maybe } from '.';
+import { Maybe } from './index.js';
 
 interface AuthedUser {
   access_token: Maybe<string>;

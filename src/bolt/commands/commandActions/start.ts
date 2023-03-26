@@ -1,14 +1,14 @@
 import { SlashCommand } from '@slack/bolt';
 
-import { DBTypes } from '../../../lib/utils/types';
+import { DBTypes } from '../../../lib/utils/types/index.js';
 import {
   createPath,
   DBKey,
   dbRead,
   dbStore,
   DBTypeKey
-} from '../../../lib/firebase';
-import { getToken } from '../../actions';
+} from '../../../lib/firebase/index.js';
+import { getToken } from '../../actions/index.js';
 
 export const start = async (command: SlashCommand) => {
   const token = await getToken(

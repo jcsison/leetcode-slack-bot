@@ -1,8 +1,8 @@
 import { SlackCommandMiddlewareArgs, SlashCommand } from '@slack/bolt';
 
-import { Guard, Log } from '../../lib/utils/helpers';
-import { bolt } from '../..';
-import { getToken } from '../actions';
+import { Guard, Log } from '../../lib/utils/helpers/index.js';
+import { bolt } from '../../index.js';
+import { getToken } from '../actions/index.js';
 
 export enum CommandType {
   POST = 'post',

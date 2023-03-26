@@ -1,7 +1,7 @@
 import { SlashCommand } from '@slack/bolt';
 
-import { TimeStampedMessageData } from '../helper';
-import { getPreviousQuestionMessage, getToken } from '../../actions';
+import { TimeStampedMessageData } from '../helper.js';
+import { getPreviousQuestionMessage, getToken } from '../../actions/index.js';
 
 export const delete_ = async (command: SlashCommand) => {
   const token = await getToken(

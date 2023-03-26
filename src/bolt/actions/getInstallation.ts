@@ -1,6 +1,6 @@
 import { InstallationQuery } from '@slack/bolt';
 
-import { receiver } from '../..';
+import { receiver } from '../../index.js';
 
 export const getInstallation = async (query: InstallationQuery<boolean>) => {
   const installationStore = receiver.installer?.installationStore;

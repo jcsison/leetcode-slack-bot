@@ -1,6 +1,6 @@
-import { bolt } from '../..';
-import { postError } from '.';
-import { validateLeetCodeUrl } from '../../lib/dataSource/leetcode';
+import { bolt } from '../../index.js';
+import { postError } from './index.js';
+import { validateLeetCodeUrl } from '../../lib/dataSource/leetcode/index.js';
 
 export const getPreviousQuestionMessage = async (
   appId: string,

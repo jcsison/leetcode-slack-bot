@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
-import { LeetCodeTypes } from '../../../../lib/utils/types';
-import { Log } from '../../../../lib/utils/helpers';
-import { getTopicTags } from '../../../../lib/dataSource/leetcode/actions';
+import { LeetCodeTypes } from '../../../../lib/utils/types/index.js';
+import { Log } from '../../../../lib/utils/helpers/index.js';
+import { getTopicTags } from '../../../../lib/dataSource/leetcode/actions/index.js';
 
 export const topicTagsText = (page: number) => {
   try {

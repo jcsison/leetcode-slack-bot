@@ -1,4 +1,4 @@
-import { getInstallationByChannel } from './getInstallationByChannel';
+import { getInstallationByChannel } from './index.js';
 
 export const getTokenByChannel = async (channelId: string) => {
   const installation = await getInstallationByChannel(channelId);

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-import { LeetCodeTypes } from '../../../../lib/utils/types';
-import { getCompanyTags } from '../../../../lib/dataSource/leetcode/actions/getCompanyTags';
+import { LeetCodeTypes } from '../../../../lib/utils/types/index.js';
+import { getCompanyTags } from '../../../../lib/dataSource/leetcode/actions/getCompanyTags.js';
 
 export const companyTagsText = async (page: number) => {
   const tags = (await getCompanyTags())?.sort((a, b) =>

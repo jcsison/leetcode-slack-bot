@@ -6,8 +6,8 @@ import {
   roll,
   start,
   stop
-} from './commandActions';
-import { command, CommandType } from './helper';
+} from './commandActions/index.js';
+import { command, CommandType } from './helper.js';
 
 export const commands = [
   command({ name: '/delete', type: CommandType.DELETE, action: delete_ }),

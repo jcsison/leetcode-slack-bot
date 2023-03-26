@@ -4,14 +4,14 @@ import {
   InstallationQuery
 } from '@slack/bolt';
 
-import { Log } from '../../lib/utils/helpers';
+import { Log } from '../../lib/utils/helpers/index.js';
 import {
   createPath,
   dbDelete,
   DBKey,
   dbStore,
   dbUnsafeRead
-} from '../../lib/firebase';
+} from '../../lib/firebase/index.js';
 
 export class LCFileInstallationStore extends FileInstallationStore {
   storeInstallation = async (installation: Installation) => {

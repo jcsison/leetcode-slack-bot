@@ -1,6 +1,6 @@
-import { LeetCodeTypes } from '../../../utils/types';
-import { Queries } from '../graphql/queries';
-import { graphQLRequest } from '../graphql';
+import { LeetCodeTypes } from '../../../utils/types/index.js';
+import { Queries } from '../graphql/queries/index.js';
+import { graphQLRequest } from '../graphql/index.js';
 
 export const companyTags = () => {
   return graphQLRequest<LeetCodeTypes.Tag[]>(

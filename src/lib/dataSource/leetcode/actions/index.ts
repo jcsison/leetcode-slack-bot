@@ -1,2 +1,2 @@
-export * from './getRandomQuestion';
-export * from './getTopicTags';
+export * from './getRandomQuestion.js';
+export * from './getTopicTags.js';

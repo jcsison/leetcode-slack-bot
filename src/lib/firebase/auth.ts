@@ -1,6 +1,6 @@
 import { JWT } from 'google-auth-library';
 
-import { Log } from '../utils/helpers';
+import { Log } from '../utils/helpers/index.js';
 
 export const generateFirebaseAccessToken = async () => {
   try {

@@ -1,12 +1,12 @@
 import { SlashCommand } from '@slack/bolt';
 
-import { Enums, LeetCodeTypes } from '../../../lib/utils/types';
-import { getCompanyTags } from '../../../lib/dataSource/leetcode/actions/getCompanyTags';
+import { Enums, LeetCodeTypes } from '../../../lib/utils/types/index.js';
+import { getCompanyTags } from '../../../lib/dataSource/leetcode/actions/getCompanyTags.js';
 import {
   getRandomQuestion,
   getTopicTags
-} from '../../../lib/dataSource/leetcode/actions';
-import { getToken, postError } from '../../actions';
+} from '../../../lib/dataSource/leetcode/actions/index.js';
+import { getToken, postError } from '../../actions/index.js';
 
 const validateFilter = (
   filter: string,

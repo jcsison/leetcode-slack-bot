@@ -1,4 +1,4 @@
-import { getInstallation } from '.';
+import { getInstallation } from './index.js';
 
 export const getToken = async (
   enterpriseId: string | undefined,

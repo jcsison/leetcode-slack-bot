@@ -2,10 +2,10 @@ import * as dotenv from 'dotenv';
 import Bolt from '@slack/bolt';
 import admin from 'firebase-admin';
 
-import { LCFileInstallationStore } from './bolt/utils/LCFileInstallationStore';
-import { Log } from './lib/utils/helpers';
-import { launchApi } from './api/launchApi';
-import { launchBolt } from './bolt/launchBolt';
+import { LCFileInstallationStore } from './bolt/utils/LCFileInstallationStore.js';
+import { Log } from './lib/utils/helpers/index.js';
+import { launchApi } from './api/launchApi.js';
+import { launchBolt } from './bolt/launchBolt.js';
 
 dotenv.config();
 

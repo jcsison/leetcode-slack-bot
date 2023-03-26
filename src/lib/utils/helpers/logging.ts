@@ -1,8 +1,8 @@
 import pino from 'pino';
 import { serializeError } from 'serialize-error';
 
-import { DataError } from '../types';
-import { Guard } from '.';
+import { DataError } from '../types/index.js';
+import { Guard } from './index.js';
 
 const logger = pino({
   base: undefined

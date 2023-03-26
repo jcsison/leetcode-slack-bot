@@ -1,4 +1,4 @@
-import { bolt } from '../..';
+import { bolt } from '../../index.js';
 
 export const getChannels = async (token: string) => {
   const data = await bolt.client.conversations.list({ token });

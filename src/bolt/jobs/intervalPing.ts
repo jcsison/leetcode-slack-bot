@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
 
-import { Log } from '../../lib/utils/helpers';
+import { Log } from '../../lib/utils/helpers/index.js';
 
 class IntervalPing {
   rule: RecurrenceSpecObjLit = { minute: [0, 20, 40] };

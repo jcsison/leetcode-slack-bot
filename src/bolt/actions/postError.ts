@@ -1,5 +1,5 @@
-import { Log } from '../../lib/utils/helpers';
-import { bolt } from '../..';
+import { Log } from '../../lib/utils/helpers/index.js';
+import { bolt } from '../../index.js';
 
 export const postError = async (
   text: string,

@@ -1,13 +1,13 @@
 import { SlashCommand } from '@slack/bolt';
 
-import { DBTypes } from '../../../lib/utils/types';
+import { DBTypes } from '../../../lib/utils/types/index.js';
 import {
   createPath,
   dbDelete,
   DBKey,
   dbRead,
   DBTypeKey
-} from '../../../lib/firebase';
+} from '../../../lib/firebase/index.js';
 
 export const stop = async (command: SlashCommand) => {
   const channelId = command.channel_id;

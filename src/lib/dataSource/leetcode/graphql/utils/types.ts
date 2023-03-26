@@ -1,4 +1,4 @@
-import { Maybe } from '../../../../utils/types';
+import { Maybe } from '../../../../utils/types/index.js';
 
 export interface GraphQLErrorLocation {
   line: number;

@@ -5,8 +5,8 @@ import {
   DBInstallationKey,
   DBKey,
   DBValueKey
-} from '../../lib/firebase';
-import { dbFindByChildKeyValue } from '../../lib/firebase/actions';
+} from '../../lib/firebase/index.js';
+import { dbFindByChildKeyValue } from '../../lib/firebase/actions.js';
 
 export const getInstallationByChannel = async (channelId: string) => {
   const installation = await dbFindByChildKeyValue<Installation>(

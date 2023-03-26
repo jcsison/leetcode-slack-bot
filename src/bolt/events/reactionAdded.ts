@@ -1,10 +1,10 @@
 import { Middleware, SlackEventMiddlewareArgs } from '@slack/bolt';
 
-import { Log } from '../../lib/utils/helpers';
-import { bolt } from '../..';
-import { getMessage, getMessageReply, getTokenByChannel } from '../actions';
-import { solutionPosted } from './message/solutionPosted';
-import { validateLeetCodeUrl } from '../../lib/dataSource/leetcode';
+import { Log } from '../../lib/utils/helpers/index.js';
+import { bolt } from '../../index.js';
+import { getMessage, getMessageReply, getTokenByChannel } from '../actions/index.js';
+import { solutionPosted } from './message/solutionPosted.js';
+import { validateLeetCodeUrl } from '../../lib/dataSource/leetcode/index.js';
 
 const reactionAdded: Middleware<
   SlackEventMiddlewareArgs<'reaction_added'>
