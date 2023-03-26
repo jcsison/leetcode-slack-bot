@@ -19,12 +19,12 @@ export class LCFileInstallationStore extends FileInstallationStore {
       if (installation.isEnterpriseInstall && installation.enterprise?.id) {
         await dbStore(
           createPath(DBKey.INSTALLATIONS, installation.enterprise.id),
-          parseJSON(JSON.stringify(installation), Guard.string)
+          parseJSON(JSON.stringify(installation), Guard.object())
         );
       } else if (installation.team?.id) {
         await dbStore(
           createPath(DBKey.INSTALLATIONS, installation.team.id),
-          parseJSON(JSON.stringify(installation), Guard.string)
+          parseJSON(JSON.stringify(installation), Guard.object())
         );
       }
     } catch (error) {

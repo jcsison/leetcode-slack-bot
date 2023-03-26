@@ -16,7 +16,7 @@ export const parseJSON = <T>(text: string | undefined, guard: GuardType<T>) => {
     if (guard(result)) {
       return result;
     } else {
-      throw new Error('Error parsing JSON');
+      throw new Error(`Error parsing JSON: ${text}`);
     }
   } catch (error) {
     Log.error(error);
