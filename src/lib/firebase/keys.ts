@@ -10,6 +10,7 @@ export enum DBKey {
 }
 
 export enum DBInstallationKey {
+  BOT = 'bot',
   INCOMING_WEBHOOK = 'incomingWebhook'
 }
 
@@ -21,5 +22,6 @@ export enum DBTypeKey {
 }
 
 export enum DBValueKey {
-  CHANNEL_ID = 'channelId'
+  CHANNEL_ID = 'channelId',
+  USER_ID = 'userId'
 }

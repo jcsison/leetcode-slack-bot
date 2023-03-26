@@ -7,9 +7,9 @@ import { questionReact } from './questionReact.js';
 
 const reactionAdded: Middleware<
   SlackEventMiddlewareArgs<'reaction_added'>
-> = async ({ payload }) => {
+> = async ({ body, payload }) => {
   try {
-    Log.info(payload);
+    Log.info({ body, payload });
 
     await deleteReact(payload);
     await questionReact(payload);
