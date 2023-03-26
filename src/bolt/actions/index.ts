@@ -5,6 +5,7 @@ export * from './getInstallation.js';
 export * from './getInstallationByChannel.js';
 export * from './getMessage.js';
 export * from './getMessageReply.js';
+export * from './getPreviousMessage.js';
 export * from './getPreviousQuestionMessage.js';
 export * from './getSolvedQuestionSlugs.js';
 export * from './getToken.js';

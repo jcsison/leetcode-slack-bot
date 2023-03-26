@@ -11,7 +11,8 @@
     "dev": "node --experimental-modules --loader ts-node/esm --max_old_space_size=460 --no-warnings --optimize_for_size src/index.ts | pino-pretty",
     "build": "rimraf ./dist && tsc -p .",
     "build:watch": "tsc -w -p .",
-    "start": "npm run-script build && node --experimental-modules --max_old_space_size=460 --no-warnings --optimize_for_size dist/src/index.js | pino-pretty"
+    "init": "npm install && npm run-script build",
+    "start": "node --experimental-modules --max_old_space_size=460 --no-warnings --optimize_for_size dist/src/index.js | pino-pretty"
   },
   "author": "jcsison",
   "license": "ISC",

@@ -1,7 +1,7 @@
 import { SlashCommand } from '@slack/bolt';
 
 import { TimeStampedMessageData } from '../helper.js';
-import { getPreviousQuestionMessage, getToken } from '../../actions/index.js';
+import { getPreviousMessage, getToken } from '../../actions/index.js';
 
 export const delete_ = async (command: SlashCommand) => {
   const token = await getToken(
@@ -10,19 +10,19 @@ export const delete_ = async (command: SlashCommand) => {
     command.team_id
   );
 
-  const previousQuestionMessage = await getPreviousQuestionMessage(
+  const previousMessage = await getPreviousMessage(
     command.api_app_id,
     command.channel_id,
     command.user_id,
     token
   );
 
-  if (!previousQuestionMessage.ts) {
-    throw new Error('Error fetching previous question message');
+  if (!previousMessage.ts) {
+    throw new Error('Error fetching previous message');
   }
 
   const deleteData: TimeStampedMessageData = {
-    ts: previousQuestionMessage.ts
+    ts: previousMessage.ts
   };
 
   return deleteData;

@@ -17,6 +17,11 @@ export interface Question {
   url?: string;
 }
 
+export interface ReactionInfo {
+  reaction: string;
+  description: string;
+}
+
 export interface Tag {
   id: string;
   name: string;

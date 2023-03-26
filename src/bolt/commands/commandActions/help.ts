@@ -33,12 +33,24 @@ const commands: LeetCodeTypes.CommandInfo[] = [
   }
 ];
 
+const reactions: LeetCodeTypes.ReactionInfo[] = [
+  {
+    reaction: '❌',
+    description: 'Delete bot message'
+  }
+];
+
 const helpString =
   '```\n' +
   'Commands:\n' +
   commands
     .map(command => `  ${command.command} - ${command.description}`)
     .join('\n') +
+  '\n\nReactions:\n' +
+  reactions
+    .map(reaction => `  ${reaction.reaction} - ${reaction.description}`)
+    .join('\n') +
   '\n```';
+  ;
 
 export const help = () => helpString;
