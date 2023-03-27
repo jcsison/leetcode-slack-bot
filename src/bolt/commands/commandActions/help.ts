@@ -31,6 +31,10 @@ const commands: LeetCodeTypes.CommandInfo[] = [
   {
     command: '/list',
     description: 'Lists available problem filters'
+  },
+  {
+    command: '/prompt',
+    description: 'Prompt ChatGPT for a completion'
   }
 ];
 
