@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import Bolt from '@slack/bolt';
 import admin from 'firebase-admin';
+import { Configuration, OpenAIApi } from 'openai';
 
 import { Guard, Log, parseJSON } from './lib/utils/helpers/index.js';
 import { LCFileInstallationStore } from './bolt/utils/LCFileInstallationStore.js';
@@ -59,6 +60,9 @@ export const firebase = admin.initializeApp({
 });
 
 export const db = admin.database();
+
+const openAIConfig = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
+export const openAI = new OpenAIApi(openAIConfig);
 
 const startBolt = async () => {
   const port = process.env.PORT ?? 3000;

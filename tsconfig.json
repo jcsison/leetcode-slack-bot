@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "module": "ESNext",
     "moduleResolution": "node",
+    "noUncheckedIndexedAccess": true,
     "outDir": "dist",
     "resolveJsonModule": true,
     "rootDir": ".",

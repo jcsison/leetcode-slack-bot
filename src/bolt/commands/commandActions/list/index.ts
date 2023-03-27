@@ -1,5 +1,4 @@
-import { SlashCommand } from '@slack/bolt';
-
+import { CommandAction } from '../../helper.js';
 import { LeetCodeTypes } from '../../../../lib/utils/types/index.js';
 import { companyTagsText } from './companyTagsText.js';
 import { topicTagsText } from './topicTagsText.js';
@@ -28,7 +27,7 @@ const helpString = () =>
     .join('\n') +
   '\n```';
 
-export const list = async (command: SlashCommand) => {
+export const list: CommandAction<string> = async ({ command }) => {
   const paramArray = command.text.trim().split(/\s+/);
   const type = paramArray[0] ?? '';
   const page = Number(paramArray[1]) || 1;

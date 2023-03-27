@@ -1,5 +1,3 @@
-import { SlashCommand } from '@slack/bolt';
-
 import { CommandAction } from '../helper.js';
 import { DBTypes } from '../../../lib/utils/types/index.js';
 import {
@@ -10,7 +8,7 @@ import {
   DB_TYPE_KEY
 } from '../../../lib/firebase/index.js';
 
-export const stop: CommandAction = async (command: SlashCommand) => {
+export const stop: CommandAction<string> = async ({ command }) => {
   const channelId = command.channel_id;
 
   const willPost = await dbRead<DBTypes.PostQuestion>(

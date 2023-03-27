@@ -1,9 +1,9 @@
-import { SlackCommandMiddlewareArgs, SlashCommand } from '@slack/bolt';
+import { SlackCommandMiddlewareArgs } from '@slack/bolt';
 
 import { EnumType } from '../../lib/utils/types/index.js';
 import { Guard, Log } from '../../lib/utils/helpers/index.js';
 import { bolt } from '../../index.js';
-import { getTokenById } from '../actions/index.js';
+import { getTokenById, postError } from '../actions/index.js';
 
 export const COMMAND_TYPE = {
   POST: 'post',
@@ -11,13 +11,13 @@ export const COMMAND_TYPE = {
   DELETE: 'delete'
 } as const;
 
-export type CommandAction<T = unknown> = (
-  payload: SlashCommand,
+export type CommandAction<T = void> = (
+  res: SlackCommandMiddlewareArgs,
   token: string
 ) => T | undefined | Promise<T | undefined>;
 
 interface CommandProps {
-  action: CommandAction;
+  action: CommandAction<unknown>;
   name: string;
   type?: EnumType<typeof COMMAND_TYPE>;
 }
@@ -36,7 +36,7 @@ export const command =
 
         const token = await getTokenById({ teamId: res.body.team_id });
 
-        const data = await action(res.payload, token);
+        const data = await action(res, token);
 
         if (!data) {
           throw new Error('Invalid data');
@@ -73,8 +73,8 @@ export const command =
             await bolt.client.chat.update({
               channel: res.command.channel_id,
               text: data.text,
-              ts: data.ts,
-              token
+              token,
+              ts: data.ts
             });
             break;
           case COMMAND_TYPE.DELETE:
@@ -86,14 +86,28 @@ export const command =
 
             await bolt.client.chat.delete({
               channel: res.command.channel_id,
-              ts: data.ts,
-              token
+              token,
+              ts: data.ts
             });
             break;
         }
 
         Log.info(`${name} command triggered`);
       } catch (error) {
-        Log.error(error, `Error running ${name}`);
+        const errorMessage = Guard.validate(
+          error,
+          Guard.object<Error>('message')
+        )?.message;
+
+        Log.error(error, errorMessage ?? `Error running ${name}`);
+
+        const token = await getTokenById({ teamId: res.body.team_id });
+
+        await postError(
+          errorMessage ?? `Error running ${name}`,
+          res.body.channel_id,
+          token,
+          res.body.user_id
+        );
       }
     });

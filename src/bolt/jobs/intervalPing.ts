@@ -9,12 +9,12 @@ class IntervalPing {
     try {
       if (process.env.APP_URL) {
         await axios(process.env.APP_URL);
-        Log.info('Pinged dyno');
+        Log.info('Pinged bot');
       } else {
         throw new Error('App URL not found');
       }
     } catch (error) {
-      Log.error(error, 'Error pinging dyno');
+      Log.error(error, 'Error pinging bot');
     }
   };
   job = () => scheduleJob(this.rule, this.fn);

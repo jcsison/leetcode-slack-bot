@@ -54,4 +54,4 @@ const helpString =
   '\n```';
   ;
 
-export const help: CommandAction = () => helpString;
+export const help: CommandAction<string> = () => helpString;

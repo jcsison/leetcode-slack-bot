@@ -1,5 +1,3 @@
-import { SlashCommand } from '@slack/bolt';
-
 import { CommandAction } from '../helper.js';
 import { Enums, LeetCodeTypes } from '../../../lib/utils/types/index.js';
 import { getCompanyTags } from '../../../lib/dataSource/leetcode/actions/getCompanyTags.js';
@@ -22,10 +20,7 @@ const validateFilter = (
   return false;
 };
 
-export const roll: CommandAction<string> = async (
-  command: SlashCommand,
-  token: string
-) => {
+export const roll: CommandAction<string> = async ({ command }, token) => {
   const tagFilters = command.text
     .trim()
     .split(/\s+/)

@@ -22,7 +22,7 @@ export const topicTagsText = (page: number) => {
 
     const tagsString =
       '_Topics Tags:_\n' +
-      tagsArray[arrayPage - 1].map(tag => `\`${tag.slug}\``).join(' ') +
+      tagsArray[arrayPage - 1]?.map(tag => `\`${tag.slug}\``).join(' ') +
       `\n_page ${arrayPage} of ${tagsArray.length}_`;
 
     return tagsString;

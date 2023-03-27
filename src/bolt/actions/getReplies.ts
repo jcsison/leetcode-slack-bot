@@ -1,6 +1,6 @@
 import { bolt } from '../../index.js';
 
-export const getMessageReply = async (
+export const getReplies = async (
   messageTs: string,
   channelId: string,
   token: string
@@ -8,16 +8,9 @@ export const getMessageReply = async (
   const messagesResult = await bolt.client.conversations.replies({
     channel: channelId,
     inclusive: true,
-    limit: 1,
     token,
-    ts: messageTs,
+    ts: messageTs
   });
 
-  const message = messagesResult.messages?.[0];
-
-  if (!message) {
-    throw new Error('Message not found');
-  }
-
-  return message;
+  return messagesResult.messages;
 };
