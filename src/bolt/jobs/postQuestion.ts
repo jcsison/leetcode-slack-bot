@@ -3,7 +3,12 @@ import { RecurrenceSpecObjLit, scheduleJob } from 'node-schedule';
 import { Log } from '../../lib/utils/helpers/index.js';
 import { DBTypes, Enums } from '../../lib/utils/types/index.js';
 import { bolt } from '../../index.js';
-import { createPath, DBKey, dbRead, DBTypeKey } from '../../lib/firebase/index.js';
+import {
+  createPath,
+  dbRead,
+  DB_KEY,
+  DB_TYPE_KEY
+} from '../../lib/firebase/index.js';
 import { getRandomQuestion } from '../../lib/dataSource/leetcode/actions/index.js';
 
 class PostQuestion {
@@ -18,7 +23,7 @@ class PostQuestion {
     try {
       const postQuestionData = await dbRead<
         Record<string, DBTypes.PostQuestion>
-      >(createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS));
+      >(createPath(DB_KEY.POST_QUESTION, DB_TYPE_KEY.CHANNELS));
 
       if (!postQuestionData) {
         throw new Error('Error fetching channels');
@@ -38,7 +43,7 @@ class PostQuestion {
           }
 
           const randomQuestion = await getRandomQuestion(channelId, {
-            difficulty: Enums.QuestionDifficulty.EASY,
+            difficulty: Enums.QUESTION_DIFFICULTY.EASY,
             listId: 'wpwgkgt'
           });
 

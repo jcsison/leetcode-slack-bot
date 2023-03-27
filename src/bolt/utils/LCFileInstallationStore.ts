@@ -8,9 +8,9 @@ import { Guard, Log, parseJSON } from '../../lib/utils/helpers/index.js';
 import {
   createPath,
   dbDelete,
-  DBKey,
   dbStore,
-  dbUnsafeRead
+  dbUnsafeRead,
+  DB_KEY
 } from '../../lib/firebase/index.js';
 
 export class LCFileInstallationStore extends FileInstallationStore {
@@ -18,12 +18,12 @@ export class LCFileInstallationStore extends FileInstallationStore {
     try {
       if (installation.isEnterpriseInstall && installation.enterprise?.id) {
         await dbStore(
-          createPath(DBKey.INSTALLATIONS, installation.enterprise.id),
+          createPath(DB_KEY.INSTALLATIONS, installation.enterprise.id),
           parseJSON(JSON.stringify(installation), Guard.object())
         );
       } else if (installation.team?.id) {
         await dbStore(
-          createPath(DBKey.INSTALLATIONS, installation.team.id),
+          createPath(DB_KEY.INSTALLATIONS, installation.team.id),
           parseJSON(JSON.stringify(installation), Guard.object())
         );
       }
@@ -35,11 +35,11 @@ export class LCFileInstallationStore extends FileInstallationStore {
     try {
       if (query.isEnterpriseInstall && query.enterpriseId) {
         return await dbUnsafeRead<Installation>(
-          createPath(DBKey.INSTALLATIONS, query.enterpriseId)
+          createPath(DB_KEY.INSTALLATIONS, query.enterpriseId)
         );
       } else if (query.teamId) {
         return await dbUnsafeRead<Installation>(
-          createPath(DBKey.INSTALLATIONS, query.teamId)
+          createPath(DB_KEY.INSTALLATIONS, query.teamId)
         );
       } else {
         throw new Error('Enterprise ID and team ID not found');
@@ -52,9 +52,9 @@ export class LCFileInstallationStore extends FileInstallationStore {
   deleteInstallation = async (query: InstallationQuery<boolean>) => {
     try {
       if (query.isEnterpriseInstall && query.enterpriseId) {
-        await dbDelete(createPath(DBKey.INSTALLATIONS, query.enterpriseId));
+        await dbDelete(createPath(DB_KEY.INSTALLATIONS, query.enterpriseId));
       } else if (query.teamId) {
-        await dbDelete(createPath(DBKey.INSTALLATIONS, query.teamId));
+        await dbDelete(createPath(DB_KEY.INSTALLATIONS, query.teamId));
       } else {
         throw new Error('Enterprise ID and team ID not found');
       }

@@ -1,3 +1,4 @@
+import { CommandAction } from '../helper.js';
 import { LeetCodeTypes } from '../../../lib/utils/types/index.js';
 
 const commands: LeetCodeTypes.CommandInfo[] = [
@@ -53,4 +54,4 @@ const helpString =
   '\n```';
   ;
 
-export const help = () => helpString;
+export const help: CommandAction = () => helpString;

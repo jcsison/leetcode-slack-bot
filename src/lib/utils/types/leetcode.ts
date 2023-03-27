@@ -1,4 +1,4 @@
-import { Enums } from './index.js';
+import { Enums, EnumType } from './index.js';
 
 export interface CommandInfo {
   command: string;
@@ -6,7 +6,7 @@ export interface CommandInfo {
 }
 
 export interface QuestionFilter {
-  difficulty?: Enums.QuestionDifficulty;
+  difficulty?: EnumType<typeof Enums.QUESTION_DIFFICULTY>;
   listId?: string;
   tags?: string[];
 }

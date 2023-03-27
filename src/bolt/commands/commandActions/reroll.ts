@@ -1,16 +1,13 @@
 import { SlashCommand } from '@slack/bolt';
 
-import { TimeStampedMessageData } from '../helper.js';
-import { getPreviousQuestionMessage, getToken } from '../../actions/index.js';
+import { CommandAction, TimeStampedMessageData } from '../helper.js';
+import { getPreviousQuestionMessage } from '../../actions/index.js';
 import { roll } from './roll.js';
 
-export const reroll = async (command: SlashCommand) => {
-  const token = await getToken(
-    command.enterprise_id,
-    !!command.is_enterprise_install,
-    command.team_id
-  );
-
+export const reroll: CommandAction = async (
+  command: SlashCommand,
+  token: string
+) => {
   const previousQuestionMessage = await getPreviousQuestionMessage(
     command.api_app_id,
     command.channel_id,
@@ -22,7 +19,7 @@ export const reroll = async (command: SlashCommand) => {
     throw new Error('Error fetching previous question message');
   }
 
-  const rolledQuestionUrl = await roll(command);
+  const rolledQuestionUrl = await roll(command, token);
 
   if (!rolledQuestionUrl) {
     throw new Error('Error rolling question');

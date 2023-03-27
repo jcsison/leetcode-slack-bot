@@ -13,12 +13,12 @@ import {
   createFilter,
   createPath,
   dbDelete,
-  DBFilterKey,
   dbFindByChildKeyValue,
-  DBKey,
   dbRead,
   dbStore,
-  DBTypeKey
+  DB_FILTER_KEY,
+  DB_KEY,
+  DB_TYPE_KEY
 } from '../../../lib/firebase/index.js';
 import {
   parseHandleFromMessage,
@@ -37,7 +37,10 @@ export const solutionPosted = async (
       Guard.object<FileShareMessageEvent>('subtype')
     );
 
-    if (fileShareMessage?.subtype === 'file_share' && fileShareMessage.thread_ts) {
+    if (
+      fileShareMessage?.subtype === 'file_share' &&
+      fileShareMessage.thread_ts
+    ) {
       const parentMessage = await getMessage(
         fileShareMessage.thread_ts,
         fileShareMessage.channel,
@@ -45,19 +48,23 @@ export const solutionPosted = async (
       );
 
       if (validateLeetCodeUrl(parentMessage.text)) {
-        if (!fileShareMessage.thread_ts || !fileShareMessage.ts || !fileShareMessage.user) {
+        if (
+          !fileShareMessage.thread_ts ||
+          !fileShareMessage.ts ||
+          !fileShareMessage.user
+        ) {
           throw new Error('Invalid solution');
         }
 
         const previouslySubmittedSolution = (
           await dbFindByChildKeyValue<DBTypes.SubmittedSolution>(
             createPath(
-              DBTypeKey.CHANNELS,
+              DB_TYPE_KEY.CHANNELS,
               channelId,
-              DBKey.SUBMITTED_SOLUTIONS,
-              DBTypeKey.MESSAGES
+              DB_KEY.SUBMITTED_SOLUTIONS,
+              DB_TYPE_KEY.MESSAGES
             ),
-            createPath(DBTypeKey.FILTERS, DBFilterKey.USER_ID_QUESTION_ID),
+            createPath(DB_TYPE_KEY.FILTERS, DB_FILTER_KEY.USER_ID_QUESTION_ID),
             createFilter(fileShareMessage.user, fileShareMessage.thread_ts)
           )
         )?.[1];
@@ -69,10 +76,10 @@ export const solutionPosted = async (
           } else {
             await dbDelete(
               createPath(
-                DBTypeKey.CHANNELS,
+                DB_TYPE_KEY.CHANNELS,
                 channelId,
-                DBKey.SUBMITTED_SOLUTIONS,
-                DBTypeKey.MESSAGES,
+                DB_KEY.SUBMITTED_SOLUTIONS,
+                DB_TYPE_KEY.MESSAGES,
                 convertToPathTs(previouslySubmittedSolution.messageTs)
               )
             );
@@ -90,7 +97,10 @@ export const solutionPosted = async (
 
         const submittedSolution: DBTypes.SubmittedSolution = {
           _filters: {
-            userId_questionId: createFilter(fileShareMessage.user, fileShareMessage.thread_ts)
+            userId_questionId: createFilter(
+              fileShareMessage.user,
+              fileShareMessage.thread_ts
+            )
           },
           messageTs: fileShareMessage.ts,
           questionTs: fileShareMessage.thread_ts,
@@ -99,10 +109,10 @@ export const solutionPosted = async (
 
         const questionDB = await dbRead<DBTypes.Question>(
           createPath(
-            DBTypeKey.CHANNELS,
+            DB_TYPE_KEY.CHANNELS,
             channelId,
-            DBKey.QUESTIONS,
-            DBTypeKey.MESSAGES,
+            DB_KEY.QUESTIONS,
+            DB_TYPE_KEY.MESSAGES,
             convertToPathTs(fileShareMessage.thread_ts)
           )
         );
@@ -110,10 +120,10 @@ export const solutionPosted = async (
         if (questionDB) {
           await dbStore(
             createPath(
-              DBTypeKey.CHANNELS,
+              DB_TYPE_KEY.CHANNELS,
               channelId,
-              DBKey.SUBMITTED_SOLUTIONS,
-              DBTypeKey.MESSAGES,
+              DB_KEY.SUBMITTED_SOLUTIONS,
+              DB_TYPE_KEY.MESSAGES,
               convertToPathTs(fileShareMessage.ts)
             ),
             submittedSolution
@@ -148,10 +158,10 @@ export const solutionPosted = async (
 
           await dbStore(
             createPath(
-              DBTypeKey.CHANNELS,
+              DB_TYPE_KEY.CHANNELS,
               channelId,
-              DBKey.QUESTIONS,
-              DBTypeKey.MESSAGES,
+              DB_KEY.QUESTIONS,
+              DB_TYPE_KEY.MESSAGES,
               convertToPathTs(fileShareMessage.thread_ts)
             ),
             question
@@ -168,17 +178,22 @@ export const solutionPosted = async (
 
           await dbStore(
             createPath(
-              DBTypeKey.CHANNELS,
+              DB_TYPE_KEY.CHANNELS,
               channelId,
-              DBKey.SUBMITTED_SOLUTIONS,
-              DBTypeKey.MESSAGES,
+              DB_KEY.SUBMITTED_SOLUTIONS,
+              DB_TYPE_KEY.MESSAGES,
               convertToPathTs(fileShareMessage.ts)
             ),
             submittedSolution
           );
         }
 
-        await addReaction('white_check_mark', channelId, fileShareMessage.ts, token);
+        await addReaction(
+          'white_check_mark',
+          channelId,
+          fileShareMessage.ts,
+          token
+        );
 
         Log.info('Solution added to db');
       } else {

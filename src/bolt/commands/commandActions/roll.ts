@@ -1,12 +1,13 @@
 import { SlashCommand } from '@slack/bolt';
 
+import { CommandAction } from '../helper.js';
 import { Enums, LeetCodeTypes } from '../../../lib/utils/types/index.js';
 import { getCompanyTags } from '../../../lib/dataSource/leetcode/actions/getCompanyTags.js';
 import {
   getRandomQuestion,
   getTopicTags
 } from '../../../lib/dataSource/leetcode/actions/index.js';
-import { getToken, postError } from '../../actions/index.js';
+import { postError } from '../../actions/index.js';
 
 const validateFilter = (
   filter: string,
@@ -21,7 +22,10 @@ const validateFilter = (
   return false;
 };
 
-export const roll = async (command: SlashCommand) => {
+export const roll: CommandAction<string> = async (
+  command: SlashCommand,
+  token: string
+) => {
   const tagFilters = command.text
     .trim()
     .split(/\s+/)
@@ -31,12 +35,6 @@ export const roll = async (command: SlashCommand) => {
 
   for (const filter of tagFilters) {
     if (!validateFilter(filter, [topicTags, companyTags])) {
-      const token = await getToken(
-        command.enterprise_id,
-        !!command.is_enterprise_install,
-        command.team_id
-      );
-
       await postError(
         'Invalid filter',
         command.channel_id,
@@ -47,7 +45,7 @@ export const roll = async (command: SlashCommand) => {
   }
 
   const randomQuestion = await getRandomQuestion(command.channel_id, {
-    difficulty: Enums.QuestionDifficulty.EASY,
+    difficulty: Enums.QUESTION_DIFFICULTY.EASY,
     tags: tagFilters
   });
 

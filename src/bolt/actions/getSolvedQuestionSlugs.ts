@@ -1,14 +1,19 @@
 import { DBTypes } from '../../lib/utils/types/index.js';
 import { Guard } from '../../lib/utils/helpers/index.js';
-import { createPath, DBKey, dbRead, DBTypeKey } from '../../lib/firebase/index.js';
+import {
+  createPath,
+  dbRead,
+  DB_KEY,
+  DB_TYPE_KEY
+} from '../../lib/firebase/index.js';
 
 export const getSolvedQuestionSlugs = async (channelId: string) => {
   const solvedQuestions = await dbRead<Record<string, DBTypes.Question>>(
     createPath(
-      DBTypeKey.CHANNELS,
+      DB_TYPE_KEY.CHANNELS,
       channelId,
-      DBKey.QUESTIONS,
-      DBTypeKey.MESSAGES
+      DB_KEY.QUESTIONS,
+      DB_TYPE_KEY.MESSAGES
     )
   );
 

@@ -1,17 +1,17 @@
 import { ReactionAddedEvent } from '@slack/bolt';
 
-import {
-  getMessage,
-  getMessageReply,
-  getTokenById
-} from '../../actions/index.js';
+import { getMessage, getMessageReply } from '../../actions/index.js';
 import { solutionPosted } from '../message/solutionPosted.js';
 import { validateLeetCodeUrl } from '../../../lib/dataSource/leetcode/index.js';
 
-export const questionReact = async (payload: ReactionAddedEvent) => {
-  if (payload.reaction === 'white_check_mark' && payload.item.type === 'message') {
-    const token = await getTokenById({ channelId: payload.item.channel });
-
+export const questionReact = async (
+  token: string,
+  payload: ReactionAddedEvent
+) => {
+  if (
+    payload.reaction === 'white_check_mark' &&
+    payload.item.type === 'message'
+  ) {
     const message = await getMessageReply(
       payload.item.ts,
       payload.item.channel,

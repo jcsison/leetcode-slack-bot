@@ -1,21 +1,25 @@
 import { SlackCommandMiddlewareArgs, SlashCommand } from '@slack/bolt';
 
+import { EnumType } from '../../lib/utils/types/index.js';
 import { Guard, Log } from '../../lib/utils/helpers/index.js';
 import { bolt } from '../../index.js';
-import { getToken } from '../actions/index.js';
+import { getTokenById } from '../actions/index.js';
 
-export enum CommandType {
-  POST = 'post',
-  UPDATE = 'update',
-  DELETE = 'delete'
-}
+export const COMMAND_TYPE = {
+  POST: 'post',
+  UPDATE: 'update',
+  DELETE: 'delete'
+} as const;
+
+export type CommandAction<T = unknown> = (
+  payload: SlashCommand,
+  token: string
+) => T | undefined | Promise<T | undefined>;
 
 interface CommandProps {
+  action: CommandAction;
   name: string;
-  type?: CommandType;
-  action: (
-    payload: SlashCommand
-  ) => unknown | undefined | Promise<unknown | undefined>;
+  type?: EnumType<typeof COMMAND_TYPE>;
 }
 
 export interface TimeStampedMessageData {
@@ -23,80 +27,73 @@ export interface TimeStampedMessageData {
   ts: string;
 }
 
-export const command = (props: CommandProps) => () =>
-  bolt.command(props.name, async (res: SlackCommandMiddlewareArgs) => {
-    try {
-      await res.ack();
-      const data = await props.action(res.payload);
+export const command =
+  ({ action, name, type }: CommandProps) =>
+  () =>
+    bolt.command(name, async (res: SlackCommandMiddlewareArgs) => {
+      try {
+        await res.ack();
 
-      if (!data) {
-        throw new Error('Invalid data');
-      }
+        const token = await getTokenById({ teamId: res.body.team_id });
 
-      switch (props.type) {
-        case CommandType.POST:
-        default:
-          if (!(Guard.string(data) || Guard.array(Guard.string)(data))) {
-            throw new Error('Invalid data type, expected string');
-          }
+        const data = await action(res.payload, token);
 
-          if (Guard.array()(data)) {
-            for (const dataText of data) {
+        if (!data) {
+          throw new Error('Invalid data');
+        }
+
+        switch (type) {
+          case COMMAND_TYPE.POST:
+          default:
+            if (!(Guard.string(data) || Guard.array(Guard.string)(data))) {
+              throw new Error('Invalid data type, expected string');
+            }
+
+            if (Guard.array()(data)) {
+              for (const dataText of data) {
+                await res.say({
+                  channel: res.command.channel_id,
+                  text: dataText
+                });
+              }
+            } else {
               await res.say({
                 channel: res.command.channel_id,
-                text: dataText
+                text: data
               });
             }
-          } else {
-            await res.say({
+            break;
+          case COMMAND_TYPE.UPDATE:
+            if (!Guard.object<TimeStampedMessageData>('text', 'ts')(data)) {
+              throw new Error(
+                'Invalid data type, expected TimeStampedMessageData'
+              );
+            }
+
+            await bolt.client.chat.update({
               channel: res.command.channel_id,
-              text: data
+              text: data.text,
+              ts: data.ts,
+              token
             });
-          }
-          break;
-        case CommandType.UPDATE:
-          if (!Guard.object<TimeStampedMessageData>('text', 'ts')(data)) {
-            throw new Error(
-              'Invalid data type, expected TimeStampedMessageData'
-            );
-          }
+            break;
+          case COMMAND_TYPE.DELETE:
+            if (!Guard.object<TimeStampedMessageData>('ts')(data)) {
+              throw new Error(
+                'Invalid data type, expected TimeStampedMessageData'
+              );
+            }
 
-          const updateToken = await getToken(
-            res.payload.enterprise_id,
-            !!res.payload.is_enterprise_install,
-            res.payload.team_id
-          );
+            await bolt.client.chat.delete({
+              channel: res.command.channel_id,
+              ts: data.ts,
+              token
+            });
+            break;
+        }
 
-          await bolt.client.chat.update({
-            channel: res.command.channel_id,
-            text: data.text,
-            ts: data.ts,
-            token: updateToken
-          });
-          break;
-        case CommandType.DELETE:
-          if (!Guard.object<TimeStampedMessageData>('ts')(data)) {
-            throw new Error(
-              'Invalid data type, expected TimeStampedMessageData'
-            );
-          }
-
-          const deleteToken = await getToken(
-            res.payload.enterprise_id,
-            !!res.payload.is_enterprise_install,
-            res.payload.team_id
-          );
-
-          await bolt.client.chat.delete({
-            channel: res.command.channel_id,
-            ts: data.ts,
-            token: deleteToken
-          });
-          break;
+        Log.info(`${name} command triggered`);
+      } catch (error) {
+        Log.error(error, `Error running ${name}`);
       }
-
-      Log.info(`${props.name} command triggered`);
-    } catch (error) {
-      Log.error(error, `Error running ${props.name}`);
-    }
-  });
+    });

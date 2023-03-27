@@ -1,27 +1,29 @@
-export enum DBFilterKey {
-  USER_ID_QUESTION_ID = 'userId_questionId'
-}
+export const DB_FILTER_KEY = {
+  USER_ID_QUESTION_ID: 'userId_questionId'
+} as const;
 
-export enum DBKey {
-  INSTALLATIONS = 'installations',
-  POST_QUESTION = 'postQuestion',
-  QUESTIONS = 'questions',
-  SUBMITTED_SOLUTIONS = 'submittedSolutions'
-}
+export const DB_KEY = {
+  INSTALLATIONS: 'installations',
+  POST_QUESTION: 'postQuestion',
+  QUESTIONS: 'questions',
+  SUBMITTED_SOLUTIONS: 'submittedSolutions'
+};
 
-export enum DBInstallationKey {
-  BOT = 'bot',
-  INCOMING_WEBHOOK = 'incomingWebhook'
-}
+export const DB_INSTALLATION_KEY = {
+  BOT: 'bot',
+  INCOMING_WEBHOOK: 'incomingWebhook',
+  TEAM: 'team'
+};
 
-export enum DBTypeKey {
-  CHANNELS = 'channels',
-  FILTERS = '_filters',
-  MESSAGES = 'messages',
-  USERS = 'users'
-}
+export const DB_TYPE_KEY = {
+  CHANNELS: 'channels',
+  FILTERS: '_filters',
+  MESSAGES: 'messages',
+  USERS: 'users'
+};
 
-export enum DBValueKey {
-  CHANNEL_ID = 'channelId',
-  USER_ID = 'userId'
-}
+export const DB_VALUE_KEY = {
+  CHANNEL_ID: 'channelId',
+  ID: 'id',
+  USER_ID: 'userId'
+};

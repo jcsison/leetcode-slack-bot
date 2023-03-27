@@ -1,19 +1,20 @@
 import { SlashCommand } from '@slack/bolt';
 
+import { CommandAction } from '../helper.js';
 import { DBTypes } from '../../../lib/utils/types/index.js';
 import {
   createPath,
   dbDelete,
-  DBKey,
   dbRead,
-  DBTypeKey
+  DB_KEY,
+  DB_TYPE_KEY
 } from '../../../lib/firebase/index.js';
 
-export const stop = async (command: SlashCommand) => {
+export const stop: CommandAction = async (command: SlashCommand) => {
   const channelId = command.channel_id;
 
   const willPost = await dbRead<DBTypes.PostQuestion>(
-    createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS, channelId)
+    createPath(DB_KEY.POST_QUESTION, DB_TYPE_KEY.CHANNELS, channelId)
   );
 
   if (!willPost) {
@@ -21,7 +22,7 @@ export const stop = async (command: SlashCommand) => {
   }
 
   await dbDelete(
-    createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS, channelId)
+    createPath(DB_KEY.POST_QUESTION, DB_TYPE_KEY.CHANNELS, channelId)
   );
 
   return 'LeetCode Bot will now stop posting daily questions in this channel.';

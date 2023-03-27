@@ -1,26 +1,23 @@
 import { SlashCommand } from '@slack/bolt';
 
+import { CommandAction } from '../helper.js';
 import { DBTypes } from '../../../lib/utils/types/index.js';
 import {
   createPath,
-  DBKey,
   dbRead,
   dbStore,
-  DBTypeKey
+  DB_KEY,
+  DB_TYPE_KEY
 } from '../../../lib/firebase/index.js';
-import { getToken } from '../../actions/index.js';
 
-export const start = async (command: SlashCommand) => {
-  const token = await getToken(
-    command.enterprise_id,
-    !!command.is_enterprise_install,
-    command.team_id
-  );
-
+export const start: CommandAction = async (
+  command: SlashCommand,
+  token: string
+) => {
   const channelId = command.channel_id;
 
   const postQuestionToken = await dbRead<DBTypes.PostQuestion>(
-    createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS, channelId)
+    createPath(DB_KEY.POST_QUESTION, DB_TYPE_KEY.CHANNELS, channelId)
   );
 
   if (!!postQuestionToken) {
@@ -32,7 +29,7 @@ export const start = async (command: SlashCommand) => {
   };
 
   await dbStore(
-    createPath(DBKey.POST_QUESTION, DBTypeKey.CHANNELS, channelId),
+    createPath(DB_KEY.POST_QUESTION, DB_TYPE_KEY.CHANNELS, channelId),
     postChannel
   );
 
